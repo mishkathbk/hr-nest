@@ -1,0 +1,1 @@
+ALTER TABLE public.hrm_salary_certificate_req ADD approvedby varchar(100) NULL;

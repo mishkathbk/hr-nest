@@ -1,0 +1,97 @@
+import { SalaryCertificateReqService } from './salary-certificate-req.service';
+import { CreateSalaryCertificateReqDto } from './dto/create-salary-certificate-req.dto';
+import { UpdateSalaryCertificateReqDto } from './dto/update-salary-certificate-req.dto';
+import { PaginationSalaryCertificateReqDto } from './dto/pagination-salary-certificate-req.dto';
+export declare class SalaryCertificateReqController {
+    private readonly salaryCertificateReqService;
+    constructor(salaryCertificateReqService: SalaryCertificateReqService);
+    listSearch(q: string, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        reqid: number;
+        reqno: string;
+        reqdate: Date | null;
+        passporto: string | null;
+        approvedby: string | null;
+    }[]>;
+    listPagination(dto: PaginationSalaryCertificateReqDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
+    list(inactive: string, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        reqid: number;
+        reqno: string;
+        reqdate: Date | null;
+        passporto: string | null;
+        approvedby: string | null;
+    }[]>;
+    getByKey(id: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        reqid: number;
+        reqno: string;
+        reqdate: Date | null;
+        passporto: string | null;
+        approvedby: string | null;
+    }>;
+    saveData(dto: CreateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        reqid: number;
+        reqno: string;
+        reqdate: Date | null;
+        passporto: string | null;
+        approvedby: string | null;
+    }>;
+    updateData(id: number, dto: UpdateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        reqid: number;
+        reqno: string;
+        reqdate: Date | null;
+        passporto: string | null;
+        approvedby: string | null;
+    }>;
+    deleteData(id: number, currentId: number): Promise<{
+        deleted: boolean;
+    }>;
+}

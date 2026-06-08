@@ -1,0 +1,1 @@
+ALTER TABLE public.hrm_salarytype ADD statuscd int4 NULL;

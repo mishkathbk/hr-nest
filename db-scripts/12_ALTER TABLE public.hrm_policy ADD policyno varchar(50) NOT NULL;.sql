@@ -1,0 +1,1 @@
+ALTER TABLE public.hrm_policy ADD policyno varchar(50) NOT NULL;

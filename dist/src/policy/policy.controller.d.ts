@@ -1,0 +1,97 @@
+import { PolicyService } from './policy.service';
+import { CreatePolicyDto } from './dto/create-policy.dto';
+import { UpdatePolicyDto } from './dto/update-policy.dto';
+import { PaginationPolicyDto } from './dto/pagination-policy.dto';
+export declare class PolicyController {
+    private readonly policyService;
+    constructor(policyService: PolicyService);
+    listSearch(q: string, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        policyid: number;
+        policyno: string;
+        policymessage: string | null;
+        regulationmessage: string | null;
+        documentgroupid: number | null;
+    }[]>;
+    listPagination(dto: PaginationPolicyDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
+    list(inactive: string, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        policyid: number;
+        policyno: string;
+        policymessage: string | null;
+        regulationmessage: string | null;
+        documentgroupid: number | null;
+    }[]>;
+    getByKey(id: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        policyid: number;
+        policyno: string;
+        policymessage: string | null;
+        regulationmessage: string | null;
+        documentgroupid: number | null;
+    }>;
+    saveData(dto: CreatePolicyDto, currentId: number, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        policyid: number;
+        policyno: string;
+        policymessage: string | null;
+        regulationmessage: string | null;
+        documentgroupid: number | null;
+    }>;
+    updateData(id: number, dto: UpdatePolicyDto, currentId: number, companyId: number): Promise<{
+        companyid: number | null;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        statuscd: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        isactive: boolean;
+        policyid: number;
+        policyno: string;
+        policymessage: string | null;
+        regulationmessage: string | null;
+        documentgroupid: number | null;
+    }>;
+    deleteData(id: number, currentId: number): Promise<{
+        deleted: boolean;
+    }>;
+}
