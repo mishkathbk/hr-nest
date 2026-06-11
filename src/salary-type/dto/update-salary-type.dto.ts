@@ -1,8 +1,14 @@
-import { IsString, IsNotEmpty, IsOptional, IsInt, IsDateString, IsBoolean } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsDateString,
+  IsBoolean,
+} from "class-validator";
+import { Type } from "class-transformer";
 
 export class UpdateSalaryTypeDto {
-
   @IsOptional()
   @IsString()
   SalaryTypeCode?: string;
@@ -35,4 +41,8 @@ export class UpdateSalaryTypeDto {
   @IsInt()
   @Type(() => Number)
   SortOrder?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }

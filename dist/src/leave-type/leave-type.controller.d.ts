@@ -5,38 +5,18 @@ import { PaginationLeaveTypeDto } from "./dto/pagination-leave-type.dto";
 export declare class LeaveTypeController {
     private readonly LeaveTypeService;
     constructor(LeaveTypeService: LeaveTypeService);
-    listSearch(q: string, companyId: number): Promise<{
-        companyid: number | null;
-        createdby: number | null;
-        createddate: Date | null;
-        modifiedby: number | null;
-        modifieddate: Date | null;
-        statuscd: number | null;
-        isdeleted: boolean | null;
-        deleteby: number | null;
-        deletedate: Date | null;
-        isactive: boolean;
-        leavetypeid: number;
-        leavetypecode: string | null;
-        leavetypename: string | null;
-        leavetypecd: number | null;
-        leavetypecategorycd: number | null;
-        maximumleavedays: number | null;
-        daysbeforeleave: number | null;
-        isdocumentmandatory: boolean | null;
-    }[]>;
     listPagination(dto: PaginationLeaveTypeDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
     list(inactive: string, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -48,15 +28,15 @@ export declare class LeaveTypeController {
     }[]>;
     getByKey(id: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -68,15 +48,15 @@ export declare class LeaveTypeController {
     }>;
     saveData(dto: CreateLeaveTypeDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -88,15 +68,15 @@ export declare class LeaveTypeController {
     }>;
     updateData(id: number, dto: UpdateLeaveTypeDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;

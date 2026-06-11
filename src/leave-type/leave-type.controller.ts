@@ -28,12 +28,6 @@ export class LeaveTypeController {
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // GET /api/leave-calendar/list/search?q=keyword
-  @Get("list/search")
-  listSearch(@Query("q") q = "", @CurrentUser("companyId") companyId: number) {
-    return this.LeaveTypeService.listSearch(q, companyId);
-  }
-
   // POST /api/leave-calendar/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
   @Post("list/pagination")

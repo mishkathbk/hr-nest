@@ -6,35 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model HrmLeaveCalendar {
-  leavecalendarid                                   Int          @id @default(autoincrement())
-  leavecode                                         String?      @db.VarChar(10)
-  leavename                                         String?      @db.VarChar(100)
-  leavedate                                         DateTime?    @db.Timestamp(6)
-  companyid                                         Int?
-  createdby                                         Int?
-  createddate                                       DateTime?    @default(now()) @db.Timestamp(6)
-  modifiedby                                        Int?
-  modifieddate                                      DateTime?    @db.Timestamp(6)
-  statuscd                                          Int?
-  sysacccd                                          Int?
-  isdeleted                                         Boolean?     @default(false)
-  deleteby                                          Int?
-  deletedate                                        DateTime?    @db.Timestamp(6)
-  notes1                                            String?      @db.VarChar(250)
-  notes2                                            String?      @db.VarChar(250)
-  fromdate                                          DateTime?    @db.Timestamp(6)
-  todate                                            DateTime?    @db.Timestamp(6)
-  gen_company                                       gen_company? @relation(fields: [companyid], references: [companyid], onDelete: NoAction, onUpdate: NoAction, map: "fk_leavecalendar_company")
-  gen_lookup_hrm_leavecalendar_statuscdTogen_lookup gen_lookup?  @relation("hrm_leavecalendar_statuscdTogen_lookup", fields: [statuscd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_leavecalendar_status")
-  gen_lookup_hrm_leavecalendar_sysacccdTogen_lookup gen_lookup?  @relation("hrm_leavecalendar_sysacccdTogen_lookup", fields: [sysacccd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_leavecalendar_sysacc")
-
-  @@index([companyid], map: "idx_leavecalendar_company")
-  @@index([statuscd], map: "idx_leavecalendar_status")
-  @@index([sysacccd], map: "idx_leavecalendar_sysacc")
-  @@map("hrm_leavecalendar")
-}
-
 model acc_accountcategory {
   accountcategoryid         Int                   @id @default(autoincrement())
   accountcategorycode       String?               @db.VarChar(20)
@@ -1260,7 +1231,6 @@ model gen_company {
   hrm_department                                       hrm_department[]
   hrm_designation                                      hrm_designation[]
   hrm_employee                                         hrm_employee[]
-  hrm_leavecalendar                                    HrmLeaveCalendar[]
   inv_itembrand                                        inv_itembrand[]
   inv_itemcategory                                     inv_itemcategory[]
   inv_itemcolor                                        inv_itemcolor[]
@@ -1572,8 +1542,6 @@ model gen_lookup {
   hrm_employee_hrm_employee_professioncdTogen_lookup                                                 hrm_employee[]                       @relation("hrm_employee_professioncdTogen_lookup")
   hrm_employee_hrm_employee_qualificationcdTogen_lookup                                              hrm_employee[]                       @relation("hrm_employee_qualificationcdTogen_lookup")
   hrm_employeedocument                                                                               hrm_employeedocument[]
-  hrm_leavecalendar_hrm_leavecalendar_statuscdTogen_lookup                                           HrmLeaveCalendar[]                   @relation("hrm_leavecalendar_statuscdTogen_lookup")
-  hrm_leavecalendar_hrm_leavecalendar_sysacccdTogen_lookup                                           HrmLeaveCalendar[]                   @relation("hrm_leavecalendar_sysacccdTogen_lookup")
   inv_itemmaster_inv_itemmaster_itemcosttypecdTogen_lookup                                           inv_itemmaster[]                     @relation("inv_itemmaster_itemcosttypecdTogen_lookup")
   inv_itemmaster_inv_itemmaster_itemtypecdTogen_lookup                                               inv_itemmaster[]                     @relation("inv_itemmaster_itemtypecdTogen_lookup")
   inv_itemmaster_inv_itemmaster_valuationtypecdTogen_lookup                                          inv_itemmaster[]                     @relation("inv_itemmaster_valuationtypecdTogen_lookup")
@@ -1977,6 +1945,7 @@ model hrm_salarytype {
   deletedate            DateTime?               @db.Timestamp(6)
   statuscd              Int?
   hrm_employeesalarydet hrm_employeesalarydet[]
+  hrm_salaryadjustment  hrm_salaryadjustment[]
 
   @@unique([companyid, salarytypecode], map: "uq_hrm_salarytype_company_code")
 }
@@ -2227,7 +2196,7 @@ model inv_itemsubcategory {
   itemsubcategorycode     String?                  @db.VarChar(20)
   itemsubcategoryname     String?                  @db.VarChar(200)
   itemsubcategorynamear   String?                  @db.VarChar(200)
-  itemcategoryid          Int
+  itemcategoryid          Int?
   isactive                Boolean                  @default(true)
   createdby               Int?
   createddate             DateTime?                @default(now()) @db.Timestamp(6)
@@ -2236,7 +2205,7 @@ model inv_itemsubcategory {
   companyid               Int?
   itemsubmaincategoryid   Int?
   inv_itemmaster          inv_itemmaster[]
-  inv_itemcategory        inv_itemcategory         @relation(fields: [itemcategoryid], references: [itemcategoryid], onDelete: NoAction, onUpdate: NoAction, map: "fk_itemsubcategory_category")
+  inv_itemcategory        inv_itemcategory?        @relation(fields: [itemcategoryid], references: [itemcategoryid], onDelete: NoAction, onUpdate: NoAction, map: "fk_itemsubcategory_category")
   gen_company             gen_company?             @relation(fields: [companyid], references: [companyid], onDelete: NoAction, onUpdate: NoAction, map: "fk_itemsubcategory_company")
   inv_itemsubmaincategory inv_itemsubmaincategory? @relation(fields: [itemsubmaincategoryid], references: [itemsubmaincategoryid], onDelete: NoAction, onUpdate: NoAction, map: "fk_itemsubcategory_submaincategory")
 
@@ -4525,35 +4494,57 @@ model hrm_memo {
 }
 
 model ast_assetpurchase_temp {
-  tempid            Int     @id @default(autoincrement())
-  country           String? @db.VarChar(200)
-  city              String? @db.VarChar(200)
-  propertygroupname String? @db.VarChar(200)
-  propertygroupid   String? @db.VarChar(100)
-  facilitytype      String? @db.VarChar(200)
-  propertyname      String? @db.VarChar(200)
-  level             String? @db.VarChar(100)
-  roomarea          String? @db.VarChar(200)
-  assetcategory     String? @db.VarChar(200)
-  submaincategory   String? @db.VarChar(200)
-  assetsubcategory  String? @db.VarChar(200)
-  assetname         String? @db.VarChar(200)
-  assetdescription  String? @db.VarChar(500)
-  qty               String? @db.VarChar(50)
-  unitmeasurement   String? @db.VarChar(100)
-  designlife        String? @db.VarChar(100)
-  unitcost          String? @db.VarChar(100)
-  totalassetcost    String? @db.VarChar(100)
-  conditionrating   String? @db.VarChar(100)
-  make              String? @db.VarChar(200)
-  model             String? @db.VarChar(200)
-  serialno          String? @db.VarChar(200)
-  sizecapacity      String? @db.VarChar(200)
-  areaserved        String? @db.VarChar(200)
-  feedingfrom       String? @db.VarChar(200)
-  criticality       String? @db.VarChar(100)
-  remarks           String? @db.VarChar(500)
-  assetcode         String? @db.VarChar(100)
+  tempid                            Int     @id @default(autoincrement())
+  country                           String? @db.VarChar(200)
+  city                              String? @db.VarChar(200)
+  propertygroupname                 String? @db.VarChar(200)
+  propertygroupid                   String? @db.VarChar(100)
+  facilitytype                      String? @db.VarChar(200)
+  propertyname                      String? @db.VarChar(200)
+  level                             String? @db.VarChar(100)
+  roomarea                          String? @db.VarChar(200)
+  assetcategory                     String? @db.VarChar(200)
+  submaincategory                   String? @db.VarChar(200)
+  assetsubcategory                  String? @db.VarChar(200)
+  assetname                         String? @db.VarChar(200)
+  assetdescription                  String? @db.VarChar(500)
+  qty                               String? @db.VarChar(200)
+  unitmeasurement                   String? @db.VarChar(100)
+  designlife                        String? @db.VarChar(100)
+  unitcost                          String? @db.VarChar(100)
+  totalassetcost                    String? @db.VarChar(100)
+  conditionrating                   String? @db.VarChar(100)
+  make                              String? @db.VarChar(200)
+  model                             String? @db.VarChar(200)
+  serialno                          String? @db.VarChar(200)
+  sizecapacity                      String? @db.VarChar(200)
+  areaserved                        String? @db.VarChar(200)
+  feedingfrom                       String? @db.VarChar(200)
+  criticality                       String? @db.VarChar(100)
+  remarks                           String? @db.VarChar(500)
+  assetcode                         String? @db.VarChar(100)
+  SI_NO                             Int?    @map("SI.NO")
+  Property_Group_Name               String? @map("Property Group Name") @db.VarChar(50)
+  Property_Group_Id                 String? @map("Property Group Id") @db.VarChar(50)
+  FACILITY_TYPE_USE                 String? @map("FACILITY TYPE/USE") @db.VarChar(50)
+  Property_Name_with_property_Group String? @map("Property Name with property Group") @db.VarChar(50)
+  ROOM___AREA                       String? @map("ROOM / AREA") @db.VarChar(50)
+  ASSET_CATEGORY                    String? @map("ASSET CATEGORY") @db.VarChar(50)
+  SUB_MAIN_CATEGORY                 String? @map("SUB MAIN CATEGORY") @db.VarChar(50)
+  ASSET_SUB_CATEGORY                String? @map("ASSET SUB-CATEGORY") @db.VarChar(50)
+  ASSET_NAME                        String? @map("ASSET NAME") @db.VarChar(50)
+  ASSET_DESCRIPTION                 String? @map("ASSET DESCRIPTION") @db.VarChar(50)
+  Unit__Measurement_                String? @map("Unit (Measurement)") @db.VarChar(50)
+  Design_Life                       String? @map("Design Life") @db.VarChar(50)
+  Unit_Cost                         String? @map("Unit Cost") @db.VarChar(50)
+  Total_Asset_Cost                  String? @map("Total Asset Cost") @db.VarChar(50)
+  Condition_Rating                  String? @map("Condition Rating") @db.VarChar(50)
+  SERIAL_NO_                        String? @map("SERIAL NO.") @db.VarChar(50)
+  SIZE___CAPACITY                   String? @map("SIZE / CAPACITY") @db.VarChar(50)
+  AREA_SERVED_or_FEEDING_TO         String? @map("AREA SERVED or FEEDING TO") @db.VarChar(50)
+  FEEDING_FROM                      String? @map("FEEDING FROM") @db.VarChar(50)
+  Asset_Code                        String? @map("Asset Code") @db.VarChar(50)
+  column30                          String? @db.VarChar(50)
 }
 
 model hrm_memo_employee {
@@ -4626,4 +4617,25 @@ model inv_itemsubmaincategory {
   gen_company               gen_company?          @relation(fields: [companyid], references: [companyid], onDelete: NoAction, onUpdate: NoAction, map: "fk_itemsubmaincategory_company")
 
   @@unique([companyid, itemsubmaincategorycode], map: "uq_inv_itemsubmaincategory_company_code")
+}
+
+model hrm_salaryadjustment {
+  salaryadjustmentid Int            @id @default(autoincrement())
+  employeeid         Int
+  salarytypeid       Int
+  payrollyear        Int
+  payrollmonth       Int
+  amount             Decimal?       @db.Decimal(14, 4)
+  remarks            String?        @db.VarChar(500)
+  statuscd           Int?
+  companyid          Int?
+  isactive           Boolean        @default(true)
+  createdby          Int?
+  createddate        DateTime?      @default(now()) @db.Timestamp(6)
+  modifiedby         Int?
+  modifieddate       DateTime?      @db.Timestamp(6)
+  isdeleted          Boolean?
+  deleteby           Int?
+  deletedate         DateTime?      @db.Timestamp(6)
+  hrm_salarytype     hrm_salarytype @relation(fields: [salarytypeid], references: [salarytypeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_salaryadjustment_salarytype")
 }

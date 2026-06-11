@@ -48,22 +48,22 @@ export class SalaryTypeService {
       "hrm_salarytype",
       companyId,
       "salarytypecode",
-      dto.SalaryTypeCode,
+      dto.salaryTypeCode,
     );
 
     const record = await this.prisma.hrm_salarytype.create({
       data: {
-        salarytypecode: dto.SalaryTypeCode,
-        salarytypename: dto.SalaryTypeName,
-        salarytypecategorycd: dto.SalaryTypeCategoryCd ?? null,
-        salarytypecd: dto.SalaryTypeCd ?? null,
-        sortorder: dto.SortOrder ?? null,
-        statuscd: dto.StatusCd ?? STATUS_ACTIVE,
+        salarytypecode: dto.salaryTypeCode,
+        salarytypename: dto.salaryTypeName,
+        salarytypecategorycd: dto.salaryTypeCategoryCd ?? null,
+        salarytypecd: dto.salaryTypeCd ?? null,
+        sortorder: dto.sortOrder ?? null,
+        statuscd: dto.statusCd ?? STATUS_ACTIVE,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
         isdeleted: false,
-        isactive: true,
+        isactive: dto.isActive ?? true,
       },
     });
 
@@ -101,6 +101,7 @@ export class SalaryTypeService {
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
+        isactive: dto.isActive ?? true
       },
     });
 
@@ -154,47 +155,65 @@ export class SalaryTypeService {
     dto: PaginationSalaryTypeDto,
     companyId: number,
   ): Promise<PaginatedResult<any>> {
-    const { search = "", filterList = [], offset = 0, limit = 10 } = dto;
+    const {
+      search = "",
+      filters = [],
+      pageNumber = 1,
+      pageSize = 10,
+      sortBy = "salarytypeid",
+      isDescending = true,
+    } = dto;
+
+    const skip = (pageNumber - 1) * pageSize;
+
     this.logger.log(
-      `ListPagination started | companyId=${companyId}, search=${search}, offset=${offset}, limit=${limit}`,
+      `ListPagination started | companyId=${companyId}, search=${search}, page=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy}, isDescending=${isDescending}`,
     );
 
     const where: any = { isdeleted: false, companyid: companyId };
 
-    // Search — LeaveCode LIKE '%search%' OR LeaveName LIKE '%search%'
-    if (search) {
+    // ── Full-text search across code and name ──────────────────────────
+    if (search?.trim()) {
       where.OR = [
-        { leavecode: { contains: search } },
-        { leavename: { contains: search } },
+        { salarytypecode: { contains: search } },
+        { salarytypename: { contains: search } },
       ];
     }
 
-    // Date filters — mirrors .NET filterList
-    if (filterList?.length > 0) {
-      for (const item of filterList) {
-        const val = new Date(item.attributeValue);
-        if (item.attributeName === "CAST(FromDate AS DATE)") {
-          where.OR = [
-            ...(where.OR ?? []),
-            { fromdate: { gte: val } },
-            { todate: { gte: val } },
-          ];
-        } else if (item.attributeName === "CAST(ToDate AS DATE)") {
-          where.OR = [
-            ...(where.OR ?? []),
-            { todate: { lte: val } },
-            { fromdate: { lte: val } },
-          ];
+    // ── Additional key-value filters ───────────────────────────────────
+    if (filters?.length > 0) {
+      for (const item of filters) {
+        const fieldName = item.attributeName;
+        const rawValue = item.attributeValue;
+
+        // Boolean fields
+        if (rawValue === "true" || rawValue === "false") {
+          where[fieldName] = rawValue === "true";
+        }
+        // Numeric fields
+        else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
+          where[fieldName] = Number(rawValue);
+        }
+        // Date fields (ISO format)
+        else if (!isNaN(Date.parse(rawValue))) {
+          where[fieldName] = new Date(rawValue);
+        }
+        // String fields — partial match
+        else {
+          where[fieldName] = { contains: rawValue };
         }
       }
     }
 
+    // ── Sorting ────────────────────────────────────────────────────────
+    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    console.log("orderBy:::",orderBy)
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_salarytype.findMany({
         where,
-        orderBy: { createddate: "desc" },
-        skip: offset,
-        take: limit,
+        orderBy,
+        skip,
+        take: pageSize,
       }),
       this.prisma.hrm_salarytype.count({ where }),
     ]);
@@ -205,27 +224,4 @@ export class SalaryTypeService {
     return new PaginatedResult(records, totalCount);
   }
 
-  // ── GET /api/salary-type/list/search?q= ──────────────────────────────
-  async listSearch(search: string, companyId: number) {
-    this.logger.log(
-      `ListSearch started | companyId=${companyId}, search=${search}`,
-    );
-
-    const where: any = {
-      isdeleted: false,
-      statuscd: STATUS_ACTIVE,
-      companyid: companyId,
-    };
-
-    if (search) {
-      where.OR = [
-        { salarytypecode: { contains: search } },
-        { salarytypename: { contains: search } },
-      ];
-    }
-
-    const records = await this.prisma.hrm_salarytype.findMany({ where });
-    this.logger.log(`ListSearch completed | count=${records.length}`);
-    return records;
-  }
 }

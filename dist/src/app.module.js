@@ -19,6 +19,10 @@ const salary_advance_req_module_1 = require("./salary-advance-req/salary-advance
 const employee_warning_module_1 = require("./employee-warning/employee-warning.module");
 const memo_module_1 = require("./memo/memo.module");
 const attendance_module_1 = require("./attendance/attendance.module");
+const payroll_generation_module_1 = require("./payroll-generation/payroll-generation.module");
+const salary_adjustment_module_1 = require("./salary-adjustment/salary-adjustment.module");
+const payslip_module_1 = require("./payslip/payslip.module");
+const employee_payslip_module_1 = require("./employee-payslip/employee-payslip.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +40,10 @@ exports.AppModule = AppModule = __decorate([
             employee_warning_module_1.EmployeeWarningModule,
             memo_module_1.MemoModule,
             attendance_module_1.AttendanceModule,
+            payroll_generation_module_1.PayrollGenerationModule,
+            salary_adjustment_module_1.SalaryAdjustmentModule,
+            payslip_module_1.PayslipModule,
+            employee_payslip_module_1.EmployeePayslipModule
         ],
     })
 ], AppModule);

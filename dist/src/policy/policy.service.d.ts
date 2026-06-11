@@ -9,15 +9,15 @@ export declare class PolicyService {
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -26,15 +26,15 @@ export declare class PolicyService {
     }>;
     saveData(dto: CreatePolicyDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -43,15 +43,15 @@ export declare class PolicyService {
     }>;
     updateData(id: number, dto: UpdatePolicyDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -63,15 +63,15 @@ export declare class PolicyService {
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -79,21 +79,4 @@ export declare class PolicyService {
         documentgroupid: number | null;
     }[]>;
     listPagination(dto: PaginationPolicyDto, companyId: number): Promise<PaginatedResult<any>>;
-    listSearch(search: string, companyId: number): Promise<{
-        companyid: number | null;
-        createdby: number | null;
-        createddate: Date | null;
-        modifiedby: number | null;
-        modifieddate: Date | null;
-        statuscd: number | null;
-        isdeleted: boolean | null;
-        deleteby: number | null;
-        deletedate: Date | null;
-        isactive: boolean;
-        policyid: number;
-        policyno: string;
-        policymessage: string | null;
-        regulationmessage: string | null;
-        documentgroupid: number | null;
-    }[]>;
 }

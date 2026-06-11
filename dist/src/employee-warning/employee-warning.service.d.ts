@@ -10,34 +10,34 @@ export declare class EmployeeWarningService {
     getByKey(id: number): Promise<any>;
     saveData(dto: CreateEmployeeWarningDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
+        subject: string | null;
         employeewarningid: number;
         employeeid: number;
-        subject: string | null;
         warningmessage: string | null;
     }>;
     updateData(id: number, dto: UpdateEmployeeWarningDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
+        subject: string | null;
         employeewarningid: number;
         employeeid: number;
-        subject: string | null;
         warningmessage: string | null;
     }>;
     deleteData(id: number, currentId: number): Promise<{
@@ -45,6 +45,5 @@ export declare class EmployeeWarningService {
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<any[]>;
     listPagination(dto: PaginationEmployeeWarningDto, companyId: number): Promise<PaginatedResult<any>>;
-    listSearch(search: string, companyId: number): Promise<any[]>;
     private attachEmployeeNames;
 }

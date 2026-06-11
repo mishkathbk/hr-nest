@@ -1,10 +1,12 @@
-export declare class SalaryCertificateReqFilterItemDto {
+export declare class FilterItemDto {
     attributeName: string;
     attributeValue: string;
 }
 export declare class PaginationSalaryCertificateReqDto {
+    pageNumber?: number;
+    pageSize?: number;
     search?: string;
-    filterList?: SalaryCertificateReqFilterItemDto[];
-    offset?: number;
-    limit?: number;
+    sortBy?: string;
+    isDescending?: boolean;
+    filters?: FilterItemDto[];
 }

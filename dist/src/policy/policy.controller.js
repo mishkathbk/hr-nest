@@ -24,9 +24,6 @@ let PolicyController = class PolicyController {
     constructor(policyService) {
         this.policyService = policyService;
     }
-    listSearch(q = '', companyId) {
-        return this.policyService.listSearch(q, companyId);
-    }
     listPagination(dto, companyId) {
         return this.policyService.listPagination(dto, companyId);
     }
@@ -47,14 +44,6 @@ let PolicyController = class PolicyController {
     }
 };
 exports.PolicyController = PolicyController;
-__decorate([
-    (0, common_1.Get)('list/search'),
-    __param(0, (0, common_1.Query)('q')),
-    __param(1, (0, user_decorator_1.CurrentUser)('companyId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], PolicyController.prototype, "listSearch", null);
 __decorate([
     (0, common_1.Post)('list/pagination'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

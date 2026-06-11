@@ -9,23 +9,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PaginationSalaryCertificateReqDto = exports.SalaryCertificateReqFilterItemDto = void 0;
+exports.PaginationSalaryCertificateReqDto = exports.FilterItemDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
-class SalaryCertificateReqFilterItemDto {
+class FilterItemDto {
 }
-exports.SalaryCertificateReqFilterItemDto = SalaryCertificateReqFilterItemDto;
+exports.FilterItemDto = FilterItemDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], SalaryCertificateReqFilterItemDto.prototype, "attributeName", void 0);
+], FilterItemDto.prototype, "attributeName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], SalaryCertificateReqFilterItemDto.prototype, "attributeValue", void 0);
+], FilterItemDto.prototype, "attributeValue", void 0);
 class PaginationSalaryCertificateReqDto {
+    constructor() {
+        this.pageNumber = 1;
+        this.pageSize = 10;
+        this.search = '';
+        this.sortBy = 'reqid';
+        this.isDescending = true;
+        this.filters = [];
+    }
 }
 exports.PaginationSalaryCertificateReqDto = PaginationSalaryCertificateReqDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationSalaryCertificateReqDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationSalaryCertificateReqDto.prototype, "pageSize", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -33,23 +55,19 @@ __decorate([
 ], PaginationSalaryCertificateReqDto.prototype, "search", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PaginationSalaryCertificateReqDto.prototype, "sortBy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], PaginationSalaryCertificateReqDto.prototype, "isDescending", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ValidateNested)({ each: true }),
-    (0, class_transformer_1.Type)(() => SalaryCertificateReqFilterItemDto),
+    (0, class_transformer_1.Type)(() => FilterItemDto),
     __metadata("design:type", Array)
-], PaginationSalaryCertificateReqDto.prototype, "filterList", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationSalaryCertificateReqDto.prototype, "offset", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(1),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationSalaryCertificateReqDto.prototype, "limit", void 0);
+], PaginationSalaryCertificateReqDto.prototype, "filters", void 0);
 //# sourceMappingURL=pagination-salary-certificate-req.dto.js.map

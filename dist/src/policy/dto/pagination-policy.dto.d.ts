@@ -1,10 +1,12 @@
-export declare class PolicyFilterItemDto {
+export declare class FilterItemDto {
     attributeName: string;
     attributeValue: string;
 }
 export declare class PaginationPolicyDto {
+    pageNumber?: number;
+    pageSize?: number;
     search?: string;
-    filterList?: PolicyFilterItemDto[];
-    offset?: number;
-    limit?: number;
+    sortBy?: string;
+    isDescending?: boolean;
+    filters?: FilterItemDto[];
 }

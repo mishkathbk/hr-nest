@@ -5,21 +5,20 @@ import { PaginationMemoDto } from './dto/pagination-memo.dto';
 export declare class MemoController {
     private readonly memoService;
     constructor(memoService: MemoService);
-    listSearch(q: string, companyId: number): Promise<any[]>;
     listPagination(dto: PaginationMemoDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
     list(inactive: string, companyId: number): Promise<any[]>;
     getByKey(id: number): Promise<any>;
     saveData(dto: CreateMemoDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;
@@ -29,15 +28,15 @@ export declare class MemoController {
     }>;
     updateData(id: number, dto: UpdateMemoDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;

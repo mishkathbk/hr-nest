@@ -3,12 +3,13 @@ import {
   IsOptional,
   IsInt,
   IsArray,
+  IsBoolean,
   ValidateNested,
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class SalaryCertificateReqFilterItemDto {
+export class FilterItemDto {
   @IsString()
   attributeName: string;
 
@@ -16,30 +17,34 @@ export class SalaryCertificateReqFilterItemDto {
   attributeValue: string;
 }
 
-/**
- * PaginationSalaryCertificateReqDto
- * Body: { search?, filterList?, offset?, limit? }
- */
 export class PaginationSalaryCertificateReqDto {
   @IsOptional()
-  @IsString()
-  search?: string;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SalaryCertificateReqFilterItemDto)
-  filterList?: SalaryCertificateReqFilterItemDto[];
-
-  @IsOptional()
   @IsInt()
-  @Min(0)
+  @Min(1)
   @Type(() => Number)
-  offset?: number;
+  pageNumber?: number = 1;
 
   @IsOptional()
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  limit?: number;
+  pageSize?: number = 10;
+
+  @IsOptional()
+  @IsString()
+  search?: string = '';
+
+  @IsOptional()
+  @IsString()
+  sortBy?: string = 'reqid';
+
+  @IsOptional()
+  @IsBoolean()
+  isDescending?: boolean = true;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FilterItemDto)
+  filters?: FilterItemDto[] = [];
 }

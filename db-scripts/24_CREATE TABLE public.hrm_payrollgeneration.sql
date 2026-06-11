@@ -28,3 +28,7 @@ CREATE TABLE public.hrm_payrollgeneration (
 	CONSTRAINT hrm_payrollgeneration_pkey PRIMARY KEY (payrollgenerationid),
 	CONSTRAINT uq_payrollgeneration_employee_month UNIQUE (employeeid, payrollyear, payrollmonth)
 );
+
+ALTER TABLE hrm_payrollgeneration
+ADD CONSTRAINT uq_payrollgeneration_employee_month
+UNIQUE (employeeid, payrollyear, payrollmonth);

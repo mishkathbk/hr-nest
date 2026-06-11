@@ -21,22 +21,16 @@ import { CreateSalaryTypeDto } from "./dto/create-salary-type.dto";
 import { UpdateSalaryTypeDto } from "./dto/update-salary-type.dto";
 import { PaginationSalaryTypeDto } from "./dto/pagination-salary-type.dto";
 
-@Controller("salary-type")
+@Controller("hrms/salary-type")
 // @UseGuards(JwtAuthGuard)
 export class SalaryTypeController {
   constructor(private readonly salaryTypeService: SalaryTypeService) {}
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // GET /api/salary-type/list/search?q=keyword
-  @Get("list/search")
-  listSearch(@Query("q") q = "", @CurrentUser("companyId") companyId: number) {
-    return this.salaryTypeService.listSearch(q, companyId);
-  }
-
   // POST /api/salary-type/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
-  @Post("list/pagination")
+  @Post("listPagination")
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationSalaryTypeDto,
@@ -63,7 +57,7 @@ export class SalaryTypeController {
   }
 
   // POST /api/salary-type
-  @Post()
+  @Post("Create")
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage("Created successfully")
   saveData(

@@ -24,8 +24,30 @@ __decorate([
     __metadata("design:type", String)
 ], FilterItemDto.prototype, "attributeValue", void 0);
 class PaginationSalaryTypeDto {
+    constructor() {
+        this.pageNumber = 1;
+        this.pageSize = 10;
+        this.search = '';
+        this.sortBy = 'salarytypeid';
+        this.isDescending = true;
+        this.filters = [];
+    }
 }
 exports.PaginationSalaryTypeDto = PaginationSalaryTypeDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationSalaryTypeDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationSalaryTypeDto.prototype, "pageSize", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -33,23 +55,19 @@ __decorate([
 ], PaginationSalaryTypeDto.prototype, "search", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PaginationSalaryTypeDto.prototype, "sortBy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], PaginationSalaryTypeDto.prototype, "isDescending", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => FilterItemDto),
     __metadata("design:type", Array)
-], PaginationSalaryTypeDto.prototype, "filterList", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationSalaryTypeDto.prototype, "offset", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(1),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationSalaryTypeDto.prototype, "limit", void 0);
+], PaginationSalaryTypeDto.prototype, "filters", void 0);
 //# sourceMappingURL=pagination-salary-type.dto.js.map

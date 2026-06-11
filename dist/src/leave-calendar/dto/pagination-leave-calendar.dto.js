@@ -24,8 +24,30 @@ __decorate([
     __metadata("design:type", String)
 ], FilterItemDto.prototype, "attributeValue", void 0);
 class PaginationLeaveCalendarDto {
+    constructor() {
+        this.pageNumber = 1;
+        this.pageSize = 10;
+        this.search = '';
+        this.sortBy = 'leavecalendarid';
+        this.isDescending = true;
+        this.filters = [];
+    }
 }
 exports.PaginationLeaveCalendarDto = PaginationLeaveCalendarDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationLeaveCalendarDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationLeaveCalendarDto.prototype, "pageSize", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -33,23 +55,19 @@ __decorate([
 ], PaginationLeaveCalendarDto.prototype, "search", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PaginationLeaveCalendarDto.prototype, "sortBy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], PaginationLeaveCalendarDto.prototype, "isDescending", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => FilterItemDto),
     __metadata("design:type", Array)
-], PaginationLeaveCalendarDto.prototype, "filterList", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationLeaveCalendarDto.prototype, "offset", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(1),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationLeaveCalendarDto.prototype, "limit", void 0);
+], PaginationLeaveCalendarDto.prototype, "filters", void 0);
 //# sourceMappingURL=pagination-leave-calendar.dto.js.map

@@ -28,12 +28,6 @@ export class MemoController {
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // GET /api/memo/list/search?q=keyword
-  @Get('list/search')
-  listSearch(@Query('q') q = '', @CurrentUser('companyId') companyId: number) {
-    return this.memoService.listSearch(q, companyId);
-  }
-
   // POST /api/memo/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
   @Post('list/pagination')

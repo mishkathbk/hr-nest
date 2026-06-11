@@ -6,4 +6,5 @@ export declare class UpdateSalaryTypeDto {
     SalaryTypeCategoryCd?: number;
     SalaryTypeCd?: number;
     SortOrder?: number;
+    isActive?: boolean;
 }

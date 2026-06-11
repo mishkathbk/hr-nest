@@ -24,9 +24,6 @@ let LeaveTypeController = class LeaveTypeController {
     constructor(LeaveTypeService) {
         this.LeaveTypeService = LeaveTypeService;
     }
-    listSearch(q = "", companyId) {
-        return this.LeaveTypeService.listSearch(q, companyId);
-    }
     listPagination(dto, companyId) {
         return this.LeaveTypeService.listPagination(dto, companyId);
     }
@@ -47,14 +44,6 @@ let LeaveTypeController = class LeaveTypeController {
     }
 };
 exports.LeaveTypeController = LeaveTypeController;
-__decorate([
-    (0, common_1.Get)("list/search"),
-    __param(0, (0, common_1.Query)("q")),
-    __param(1, (0, user_decorator_1.CurrentUser)("companyId")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], LeaveTypeController.prototype, "listSearch", null);
 __decorate([
     (0, common_1.Post)("list/pagination"),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

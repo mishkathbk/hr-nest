@@ -33,20 +33,20 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
     }
     async saveData(dto, currentId, companyId) {
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
-        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.SalaryTypeCode);
+        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.salaryTypeCode);
         const record = await this.prisma.hrm_salarytype.create({
             data: {
-                salarytypecode: dto.SalaryTypeCode,
-                salarytypename: dto.SalaryTypeName,
-                salarytypecategorycd: dto.SalaryTypeCategoryCd ?? null,
-                salarytypecd: dto.SalaryTypeCd ?? null,
-                sortorder: dto.SortOrder ?? null,
-                statuscd: dto.StatusCd ?? status_constants_1.STATUS_ACTIVE,
+                salarytypecode: dto.salaryTypeCode,
+                salarytypename: dto.salaryTypeName,
+                salarytypecategorycd: dto.salaryTypeCategoryCd ?? null,
+                salarytypecd: dto.salaryTypeCd ?? null,
+                sortorder: dto.sortOrder ?? null,
+                statuscd: dto.statusCd ?? status_constants_1.STATUS_ACTIVE,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
                 isdeleted: false,
-                isactive: true,
+                isactive: dto.isActive ?? true,
             },
         });
         this.logger.log(`SaveData completed | salarytypeid=${record.salarytypeid}`);
@@ -66,6 +66,7 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
+                isactive: dto.isActive ?? true
             },
         });
         if (!updated)
@@ -102,62 +103,47 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
         return records;
     }
     async listPagination(dto, companyId) {
-        const { search = "", filterList = [], offset = 0, limit = 10 } = dto;
-        this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, offset=${offset}, limit=${limit}`);
+        const { search = "", filters = [], pageNumber = 1, pageSize = 10, sortBy = "salarytypeid", isDescending = true, } = dto;
+        const skip = (pageNumber - 1) * pageSize;
+        this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, page=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy}, isDescending=${isDescending}`);
         const where = { isdeleted: false, companyid: companyId };
-        if (search) {
-            where.OR = [
-                { leavecode: { contains: search } },
-                { leavename: { contains: search } },
-            ];
-        }
-        if (filterList?.length > 0) {
-            for (const item of filterList) {
-                const val = new Date(item.attributeValue);
-                if (item.attributeName === "CAST(FromDate AS DATE)") {
-                    where.OR = [
-                        ...(where.OR ?? []),
-                        { fromdate: { gte: val } },
-                        { todate: { gte: val } },
-                    ];
-                }
-                else if (item.attributeName === "CAST(ToDate AS DATE)") {
-                    where.OR = [
-                        ...(where.OR ?? []),
-                        { todate: { lte: val } },
-                        { fromdate: { lte: val } },
-                    ];
-                }
-            }
-        }
-        const [records, totalCount] = await this.prisma.$transaction([
-            this.prisma.hrm_salarytype.findMany({
-                where,
-                orderBy: { createddate: "desc" },
-                skip: offset,
-                take: limit,
-            }),
-            this.prisma.hrm_salarytype.count({ where }),
-        ]);
-        this.logger.log(`ListPagination completed | count=${records.length}, totalCount=${totalCount}`);
-        return new response_interceptor_1.PaginatedResult(records, totalCount);
-    }
-    async listSearch(search, companyId) {
-        this.logger.log(`ListSearch started | companyId=${companyId}, search=${search}`);
-        const where = {
-            isdeleted: false,
-            statuscd: status_constants_1.STATUS_ACTIVE,
-            companyid: companyId,
-        };
-        if (search) {
+        if (search?.trim()) {
             where.OR = [
                 { salarytypecode: { contains: search } },
                 { salarytypename: { contains: search } },
             ];
         }
-        const records = await this.prisma.hrm_salarytype.findMany({ where });
-        this.logger.log(`ListSearch completed | count=${records.length}`);
-        return records;
+        if (filters?.length > 0) {
+            for (const item of filters) {
+                const fieldName = item.attributeName;
+                const rawValue = item.attributeValue;
+                if (rawValue === "true" || rawValue === "false") {
+                    where[fieldName] = rawValue === "true";
+                }
+                else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
+                    where[fieldName] = Number(rawValue);
+                }
+                else if (!isNaN(Date.parse(rawValue))) {
+                    where[fieldName] = new Date(rawValue);
+                }
+                else {
+                    where[fieldName] = { contains: rawValue };
+                }
+            }
+        }
+        const orderBy = { [sortBy]: isDescending ? "desc" : "asc" };
+        console.log("orderBy:::", orderBy);
+        const [records, totalCount] = await this.prisma.$transaction([
+            this.prisma.hrm_salarytype.findMany({
+                where,
+                orderBy,
+                skip,
+                take: pageSize,
+            }),
+            this.prisma.hrm_salarytype.count({ where }),
+        ]);
+        this.logger.log(`ListPagination completed | count=${records.length}, totalCount=${totalCount}`);
+        return new response_interceptor_1.PaginatedResult(records, totalCount);
     }
 };
 exports.SalaryTypeService = SalaryTypeService;

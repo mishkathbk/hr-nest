@@ -5,35 +5,18 @@ import { PaginationPolicyDto } from './dto/pagination-policy.dto';
 export declare class PolicyController {
     private readonly policyService;
     constructor(policyService: PolicyService);
-    listSearch(q: string, companyId: number): Promise<{
-        companyid: number | null;
-        createdby: number | null;
-        createddate: Date | null;
-        modifiedby: number | null;
-        modifieddate: Date | null;
-        statuscd: number | null;
-        isdeleted: boolean | null;
-        deleteby: number | null;
-        deletedate: Date | null;
-        isactive: boolean;
-        policyid: number;
-        policyno: string;
-        policymessage: string | null;
-        regulationmessage: string | null;
-        documentgroupid: number | null;
-    }[]>;
     listPagination(dto: PaginationPolicyDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
     list(inactive: string, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -42,15 +25,15 @@ export declare class PolicyController {
     }[]>;
     getByKey(id: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -59,15 +42,15 @@ export declare class PolicyController {
     }>;
     saveData(dto: CreatePolicyDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -76,15 +59,15 @@ export declare class PolicyController {
     }>;
     updateData(id: number, dto: UpdatePolicyDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;

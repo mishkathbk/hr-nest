@@ -10,6 +10,10 @@ import { SalaryAdvanceReqModule } from './salary-advance-req/salary-advance-req.
 import { EmployeeWarningModule } from './employee-warning/employee-warning.module';
 import { MemoModule } from './memo/memo.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { PayrollGenerationModule } from './payroll-generation/payroll-generation.module';
+import { SalaryAdjustmentModule } from './salary-adjustment/salary-adjustment.module';
+import { PayslipModule } from './payslip/payslip.module';
+import { EmployeePayslipModule } from './employee-payslip/employee-payslip.module';
 
 @Module({
   imports: [
@@ -28,6 +32,10 @@ import { AttendanceModule } from './attendance/attendance.module';
     EmployeeWarningModule,
     MemoModule,
     AttendanceModule,
+    PayrollGenerationModule,
+    SalaryAdjustmentModule,
+    PayslipModule,
+    EmployeePayslipModule
   ],
 })
 export class AppModule {}

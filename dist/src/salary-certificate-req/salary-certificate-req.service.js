@@ -107,53 +107,46 @@ let SalaryCertificateReqService = SalaryCertificateReqService_1 = class SalaryCe
         return records;
     }
     async listPagination(dto, companyId) {
-        const { search = '', filterList = [], offset = 0, limit = 10 } = dto;
-        this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, offset=${offset}, limit=${limit}`);
+        const { search = '', filters = [], pageNumber = 1, pageSize = 10, sortBy = 'reqid', isDescending = true, } = dto;
+        const skip = (pageNumber - 1) * pageSize;
+        this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, page=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy}, isDescending=${isDescending}`);
         const where = { isdeleted: false, companyid: companyId };
-        if (search) {
-            where.AND = [
-                {
-                    OR: [
-                        { reqno: { contains: search } },
-                        { passporto: { contains: search } },
-                    ],
-                },
+        if (search?.trim()) {
+            where.OR = [
+                { reqno: { contains: search } },
+                { passporto: { contains: search } },
             ];
         }
+        if (filters?.length > 0) {
+            for (const item of filters) {
+                const fieldName = item.attributeName;
+                const rawValue = item.attributeValue;
+                if (rawValue === 'true' || rawValue === 'false') {
+                    where[fieldName] = rawValue === 'true';
+                }
+                else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
+                    where[fieldName] = Number(rawValue);
+                }
+                else if (!isNaN(Date.parse(rawValue))) {
+                    where[fieldName] = new Date(rawValue);
+                }
+                else {
+                    where[fieldName] = { contains: rawValue };
+                }
+            }
+        }
+        const orderBy = { [sortBy]: isDescending ? 'desc' : 'asc' };
         const [records, totalCount] = await this.prisma.$transaction([
             this.prisma.hrm_salary_certificate_req.findMany({
                 where,
-                orderBy: { createddate: 'desc' },
-                skip: offset,
-                take: limit,
+                orderBy,
+                skip,
+                take: pageSize,
             }),
             this.prisma.hrm_salary_certificate_req.count({ where }),
         ]);
         this.logger.log(`ListPagination completed | count=${records.length}, totalCount=${totalCount}`);
         return new response_interceptor_1.PaginatedResult(records, totalCount);
-    }
-    async listSearch(search, companyId) {
-        this.logger.log(`ListSearch started | companyId=${companyId}, search=${search}`);
-        const where = {
-            isdeleted: false,
-            statuscd: status_constants_1.STATUS_ACTIVE,
-            companyid: companyId,
-        };
-        if (search) {
-            where.AND = [
-                {
-                    OR: [
-                        { reqno: { contains: search } },
-                        { passporto: { contains: search } },
-                    ],
-                },
-            ];
-        }
-        const records = await this.prisma.hrm_salary_certificate_req.findMany({
-            where,
-        });
-        this.logger.log(`ListSearch completed | count=${records.length}`);
-        return records;
     }
 };
 exports.SalaryCertificateReqService = SalaryCertificateReqService;

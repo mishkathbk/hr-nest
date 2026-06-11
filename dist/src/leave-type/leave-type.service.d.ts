@@ -9,15 +9,15 @@ export declare class LeaveTypeService {
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -29,15 +29,15 @@ export declare class LeaveTypeService {
     }>;
     saveData(dto: CreateLeaveTypeDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -49,15 +49,15 @@ export declare class LeaveTypeService {
     }>;
     updateData(id: number, dto: UpdateLeaveTypeDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -72,15 +72,15 @@ export declare class LeaveTypeService {
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -91,24 +91,4 @@ export declare class LeaveTypeService {
         isdocumentmandatory: boolean | null;
     }[]>;
     listPagination(dto: PaginationLeaveTypeDto, companyId: number): Promise<PaginatedResult<any>>;
-    listSearch(search: string, companyId: number): Promise<{
-        companyid: number | null;
-        createdby: number | null;
-        createddate: Date | null;
-        modifiedby: number | null;
-        modifieddate: Date | null;
-        statuscd: number | null;
-        isdeleted: boolean | null;
-        deleteby: number | null;
-        deletedate: Date | null;
-        isactive: boolean;
-        leavetypeid: number;
-        leavetypecode: string | null;
-        leavetypename: string | null;
-        leavetypecd: number | null;
-        leavetypecategorycd: number | null;
-        maximumleavedays: number | null;
-        daysbeforeleave: number | null;
-        isdocumentmandatory: boolean | null;
-    }[]>;
 }

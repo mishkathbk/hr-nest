@@ -24,8 +24,30 @@ __decorate([
     __metadata("design:type", String)
 ], FilterItemDto.prototype, "attributeValue", void 0);
 class PaginationLeaveTypeDto {
+    constructor() {
+        this.pageNumber = 1;
+        this.pageSize = 10;
+        this.search = '';
+        this.sortBy = 'leavetypeid';
+        this.isDescending = true;
+        this.filters = [];
+    }
 }
 exports.PaginationLeaveTypeDto = PaginationLeaveTypeDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationLeaveTypeDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    (0, class_transformer_1.Type)(() => Number),
+    __metadata("design:type", Number)
+], PaginationLeaveTypeDto.prototype, "pageSize", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -33,23 +55,19 @@ __decorate([
 ], PaginationLeaveTypeDto.prototype, "search", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PaginationLeaveTypeDto.prototype, "sortBy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], PaginationLeaveTypeDto.prototype, "isDescending", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => FilterItemDto),
     __metadata("design:type", Array)
-], PaginationLeaveTypeDto.prototype, "filterList", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(0),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationLeaveTypeDto.prototype, "offset", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.Min)(1),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], PaginationLeaveTypeDto.prototype, "limit", void 0);
+], PaginationLeaveTypeDto.prototype, "filters", void 0);
 //# sourceMappingURL=pagination-leave-type.dto.js.map

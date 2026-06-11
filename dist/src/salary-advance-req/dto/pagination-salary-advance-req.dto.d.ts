@@ -1,10 +1,12 @@
-export declare class SalaryAdvanceReqFilterItemDto {
+export declare class FilterItemDto {
     attributeName: string;
     attributeValue: string;
 }
 export declare class PaginationSalaryAdvanceReqDto {
+    pageNumber?: number;
+    pageSize?: number;
     search?: string;
-    filterList?: SalaryAdvanceReqFilterItemDto[];
-    offset?: number;
-    limit?: number;
+    sortBy?: string;
+    isDescending?: boolean;
+    filters?: FilterItemDto[];
 }

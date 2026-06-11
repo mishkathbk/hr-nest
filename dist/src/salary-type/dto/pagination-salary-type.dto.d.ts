@@ -3,8 +3,10 @@ export declare class FilterItemDto {
     attributeValue: string;
 }
 export declare class PaginationSalaryTypeDto {
+    pageNumber?: number;
+    pageSize?: number;
     search?: string;
-    filterList?: FilterItemDto[];
-    offset?: number;
-    limit?: number;
+    sortBy?: string;
+    isDescending?: boolean;
+    filters?: FilterItemDto[];
 }

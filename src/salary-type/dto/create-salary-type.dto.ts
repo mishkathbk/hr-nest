@@ -1,38 +1,41 @@
-import { IsString, IsOptional, IsInt } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsInt, IsBoolean } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateSalaryTypeDto {
+  @IsOptional()
+  @IsString()
+  salaryTypeCode?: string;
 
   @IsOptional()
   @IsString()
-  SalaryTypeCode?: string;
-
-  @IsOptional()
-  @IsString()
-  SalaryTypeName?: string;
+  salaryTypeName?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  CompanyId?: number;
+  companyId?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  StatusCd?: number;
+  statusCd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  SalaryTypeCategoryCd?: number;
+  salaryTypeCategoryCd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  SalaryTypeCd?: number;
+  salaryTypeCd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  SortOrder?: number;
+  sortOrder?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }

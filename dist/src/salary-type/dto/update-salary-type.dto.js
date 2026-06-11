@@ -55,4 +55,9 @@ __decorate([
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
 ], UpdateSalaryTypeDto.prototype, "SortOrder", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], UpdateSalaryTypeDto.prototype, "isActive", void 0);
 //# sourceMappingURL=update-salary-type.dto.js.map

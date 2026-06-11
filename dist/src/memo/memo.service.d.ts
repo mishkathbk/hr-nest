@@ -10,15 +10,15 @@ export declare class MemoService {
     getByKey(id: number): Promise<any>;
     saveData(dto: CreateMemoDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;
@@ -28,15 +28,15 @@ export declare class MemoService {
     }>;
     updateData(id: number, dto: UpdateMemoDto, currentId: number, companyId: number): Promise<{
         companyid: number | null;
+        isactive: boolean;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
         modifieddate: Date | null;
-        statuscd: number | null;
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        isactive: boolean;
+        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;
@@ -49,6 +49,5 @@ export declare class MemoService {
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<any[]>;
     listPagination(dto: PaginationMemoDto, companyId: number): Promise<PaginatedResult<any>>;
-    listSearch(search: string, companyId: number): Promise<any[]>;
     private attachEmployeeNames;
 }

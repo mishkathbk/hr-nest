@@ -24,9 +24,6 @@ let SalaryAdvanceReqController = class SalaryAdvanceReqController {
     constructor(salaryAdvanceReqService) {
         this.salaryAdvanceReqService = salaryAdvanceReqService;
     }
-    listSearch(q = '', companyId) {
-        return this.salaryAdvanceReqService.listSearch(q, companyId);
-    }
     listPagination(dto, companyId) {
         return this.salaryAdvanceReqService.listPagination(dto, companyId);
     }
@@ -47,14 +44,6 @@ let SalaryAdvanceReqController = class SalaryAdvanceReqController {
     }
 };
 exports.SalaryAdvanceReqController = SalaryAdvanceReqController;
-__decorate([
-    (0, common_1.Get)('list/search'),
-    __param(0, (0, common_1.Query)('q')),
-    __param(1, (0, user_decorator_1.CurrentUser)('companyId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], SalaryAdvanceReqController.prototype, "listSearch", null);
 __decorate([
     (0, common_1.Post)('list/pagination'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

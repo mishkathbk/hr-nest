@@ -24,9 +24,6 @@ let SalaryCertificateReqController = class SalaryCertificateReqController {
     constructor(salaryCertificateReqService) {
         this.salaryCertificateReqService = salaryCertificateReqService;
     }
-    listSearch(q = '', companyId) {
-        return this.salaryCertificateReqService.listSearch(q, companyId);
-    }
     listPagination(dto, companyId) {
         return this.salaryCertificateReqService.listPagination(dto, companyId);
     }
@@ -47,14 +44,6 @@ let SalaryCertificateReqController = class SalaryCertificateReqController {
     }
 };
 exports.SalaryCertificateReqController = SalaryCertificateReqController;
-__decorate([
-    (0, common_1.Get)('list/search'),
-    __param(0, (0, common_1.Query)('q')),
-    __param(1, (0, user_decorator_1.CurrentUser)('companyId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], SalaryCertificateReqController.prototype, "listSearch", null);
 __decorate([
     (0, common_1.Post)('list/pagination'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

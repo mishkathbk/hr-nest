@@ -3,15 +3,12 @@ import {
   IsOptional,
   IsInt,
   IsArray,
+  IsBoolean,
   ValidateNested,
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-/**
- * Represents a single date-filter entry from the filterList array.
- * Mirrors the .NET filterList pattern used in listPagination.
- */
 export class FilterItemDto {
   @IsString()
   attributeName: string;
@@ -20,32 +17,34 @@ export class FilterItemDto {
   attributeValue: string;
 }
 
-/**
- * PaginationLeaveCalendarDto
- * Body: { search?, filterList?, offset?, limit? }
- *
- * Used by POST /api/leave-calendar/list/pagination
- */
 export class PaginationLeaveCalendarDto {
   @IsOptional()
-  @IsString()
-  search?: string;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => FilterItemDto)
-  filterList?: FilterItemDto[];
-
-  @IsOptional()
   @IsInt()
-  @Min(0)
+  @Min(1)
   @Type(() => Number)
-  offset?: number;
+  pageNumber?: number = 1;
 
   @IsOptional()
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  limit?: number;
+  pageSize?: number = 10;
+
+  @IsOptional()
+  @IsString()
+  search?: string = '';
+
+  @IsOptional()
+  @IsString()
+  sortBy?: string = 'leavecalendarid';
+
+  @IsOptional()
+  @IsBoolean()
+  isDescending?: boolean = true;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => FilterItemDto)
+  filters?: FilterItemDto[] = [];
 }
