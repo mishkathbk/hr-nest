@@ -8,6 +8,14 @@ export declare class LeaveTypeService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
+        leavetypeid: number;
+        leavetypecode: string | null;
+        leavetypename: string | null;
+        leavetypecd: number | null;
+        leavetypecategorycd: number | null;
+        maximumleavedays: number | null;
+        daysbeforeleave: number | null;
+        isdocumentmandatory: boolean | null;
         companyid: number | null;
         isactive: boolean;
         createdby: number | null;
@@ -18,16 +26,16 @@ export declare class LeaveTypeService {
         deleteby: number | null;
         deletedate: Date | null;
         statuscd: number | null;
-        leavetypeid: number;
-        leavetypecode: string | null;
-        leavetypename: string | null;
-        leavetypecd: number | null;
-        leavetypecategorycd: number | null;
-        maximumleavedays: number | null;
-        daysbeforeleave: number | null;
-        isdocumentmandatory: boolean | null;
     }>;
     saveData(dto: CreateLeaveTypeDto, currentId: number, companyId: number): Promise<{
+        leavetypeid: number;
+        leavetypecode: string | null;
+        leavetypename: string | null;
+        leavetypecd: number | null;
+        leavetypecategorycd: number | null;
+        maximumleavedays: number | null;
+        daysbeforeleave: number | null;
+        isdocumentmandatory: boolean | null;
         companyid: number | null;
         isactive: boolean;
         createdby: number | null;
@@ -38,16 +46,16 @@ export declare class LeaveTypeService {
         deleteby: number | null;
         deletedate: Date | null;
         statuscd: number | null;
-        leavetypeid: number;
-        leavetypecode: string | null;
-        leavetypename: string | null;
-        leavetypecd: number | null;
-        leavetypecategorycd: number | null;
-        maximumleavedays: number | null;
-        daysbeforeleave: number | null;
-        isdocumentmandatory: boolean | null;
     }>;
     updateData(id: number, dto: UpdateLeaveTypeDto, currentId: number, companyId: number): Promise<{
+        leavetypeid: number;
+        leavetypecode: string | null;
+        leavetypename: string | null;
+        leavetypecd: number | null;
+        leavetypecategorycd: number | null;
+        maximumleavedays: number | null;
+        daysbeforeleave: number | null;
+        isdocumentmandatory: boolean | null;
         companyid: number | null;
         isactive: boolean;
         createdby: number | null;
@@ -58,6 +66,8 @@ export declare class LeaveTypeService {
         deleteby: number | null;
         deletedate: Date | null;
         statuscd: number | null;
+    }>;
+    UpdateActiveStatus(id: number, isactive: boolean, currentId: number): Promise<{
         leavetypeid: number;
         leavetypecode: string | null;
         leavetypename: string | null;
@@ -66,11 +76,29 @@ export declare class LeaveTypeService {
         maximumleavedays: number | null;
         daysbeforeleave: number | null;
         isdocumentmandatory: boolean | null;
+        companyid: number | null;
+        isactive: boolean;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        statuscd: number | null;
     }>;
     deleteData(id: number, currentId: number): Promise<{
         deleted: boolean;
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
+        leavetypeid: number;
+        leavetypecode: string | null;
+        leavetypename: string | null;
+        leavetypecd: number | null;
+        leavetypecategorycd: number | null;
+        maximumleavedays: number | null;
+        daysbeforeleave: number | null;
+        isdocumentmandatory: boolean | null;
         companyid: number | null;
         isactive: boolean;
         createdby: number | null;
@@ -81,14 +109,6 @@ export declare class LeaveTypeService {
         deleteby: number | null;
         deletedate: Date | null;
         statuscd: number | null;
-        leavetypeid: number;
-        leavetypecode: string | null;
-        leavetypename: string | null;
-        leavetypecd: number | null;
-        leavetypecategorycd: number | null;
-        maximumleavedays: number | null;
-        daysbeforeleave: number | null;
-        isdocumentmandatory: boolean | null;
     }[]>;
     listPagination(dto: PaginationLeaveTypeDto, companyId: number): Promise<PaginatedResult<any>>;
 }

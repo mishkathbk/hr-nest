@@ -20,46 +20,44 @@ __decorate([
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "EmployeeId", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "employeeid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "SalaryTypeId", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "salarytypeid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "PayrollYear", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    (0, class_transformer_1.Type)(() => Number),
-    __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "PayrollMonth", void 0);
+    (0, class_validator_1.IsDateString)(),
+    __metadata("design:type", String)
+], UpdateSalaryAdjustmentDto.prototype, "payrolldate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "Amount", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "amount", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateSalaryAdjustmentDto.prototype, "Remarks", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "remarks", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "CompanyId", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "companyid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateSalaryAdjustmentDto.prototype, "StatusCd", void 0);
+], UpdateSalaryAdjustmentDto.prototype, "statuscd", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], UpdateSalaryAdjustmentDto.prototype, "isactive", void 0);
 //# sourceMappingURL=update-salary-adjustment.dto.js.map

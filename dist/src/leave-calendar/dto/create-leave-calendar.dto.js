@@ -19,31 +19,36 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'LeaveCode is required' }),
     __metadata("design:type", String)
-], CreateLeaveCalendarDto.prototype, "LeaveCode", void 0);
+], CreateLeaveCalendarDto.prototype, "leavecode", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'LeaveName is required' }),
     __metadata("design:type", String)
-], CreateLeaveCalendarDto.prototype, "LeaveName", void 0);
+], CreateLeaveCalendarDto.prototype, "leavename", void 0);
 __decorate([
     (0, class_validator_1.IsDateString)({}, { message: 'FromDate must be a valid ISO date string' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'FromDate is required' }),
     __metadata("design:type", String)
-], CreateLeaveCalendarDto.prototype, "FromDate", void 0);
+], CreateLeaveCalendarDto.prototype, "fromdate", void 0);
 __decorate([
     (0, class_validator_1.IsDateString)({}, { message: 'ToDate must be a valid ISO date string' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'ToDate is required' }),
     __metadata("design:type", String)
-], CreateLeaveCalendarDto.prototype, "ToDate", void 0);
+], CreateLeaveCalendarDto.prototype, "todate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveCalendarDto.prototype, "StatusCd", void 0);
+], CreateLeaveCalendarDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateLeaveCalendarDto.prototype, "Description", void 0);
+], CreateLeaveCalendarDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateLeaveCalendarDto.prototype, "isactive", void 0);
 //# sourceMappingURL=create-leave-calendar.dto.js.map

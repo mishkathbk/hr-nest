@@ -8,8 +8,9 @@ export declare class PolicyService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -17,7 +18,6 @@ export declare class PolicyService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -25,8 +25,9 @@ export declare class PolicyService {
         documentgroupid: number | null;
     }>;
     saveData(dto: CreatePolicyDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -34,7 +35,6 @@ export declare class PolicyService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -42,8 +42,9 @@ export declare class PolicyService {
         documentgroupid: number | null;
     }>;
     updateData(id: number, dto: UpdatePolicyDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -51,7 +52,6 @@ export declare class PolicyService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;
@@ -62,8 +62,9 @@ export declare class PolicyService {
         deleted: boolean;
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -71,7 +72,6 @@ export declare class PolicyService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         policyid: number;
         policyno: string;
         policymessage: string | null;

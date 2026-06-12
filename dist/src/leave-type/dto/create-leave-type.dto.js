@@ -19,51 +19,56 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateLeaveTypeDto.prototype, "LeaveTypeCode", void 0);
+], CreateLeaveTypeDto.prototype, "leavetypecode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateLeaveTypeDto.prototype, "LeaveTypeName", void 0);
+], CreateLeaveTypeDto.prototype, "leavetypename", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "CompanyId", void 0);
+], CreateLeaveTypeDto.prototype, "companyid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "StatusCd", void 0);
+], CreateLeaveTypeDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "LeaveTypeCategoryCd", void 0);
+], CreateLeaveTypeDto.prototype, "leavetypecategorycd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "LeaveTypeCd", void 0);
+], CreateLeaveTypeDto.prototype, "leavetypecd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "MaximumLeaveDays", void 0);
+], CreateLeaveTypeDto.prototype, "maximumleavedays", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateLeaveTypeDto.prototype, "DaysBeforeLeave", void 0);
+], CreateLeaveTypeDto.prototype, "daysbeforeleave", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], CreateLeaveTypeDto.prototype, "IsDocumentMandatory", void 0);
+], CreateLeaveTypeDto.prototype, "isdocumentmandatory", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], CreateLeaveTypeDto.prototype, "isactive", void 0);
 //# sourceMappingURL=create-leave-type.dto.js.map

@@ -1,43 +1,41 @@
-import { IsString, IsOptional, IsInt, IsNumber } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsInt, IsNumber, IsBoolean, IsDateString } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateSalaryAdjustmentDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  EmployeeId?: number;
+  employeeid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  SalaryTypeId?: number;
+  salaryTypeid?: number;
 
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  PayrollYear?: number;
-
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  PayrollMonth?: number;
+  @IsDateString()
+  payrolldate?: string;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  Amount?: number;
+  amount?: number;
 
   @IsOptional()
   @IsString()
-  Remarks?: string;
+  remarks?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  CompanyId?: number;
+  companyid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  StatusCd?: number;
+  statuscd?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isactive?: boolean;
 }

@@ -9,7 +9,7 @@ const response_interceptor_1 = require("./common/interceptors/response.intercept
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
-    app.setGlobalPrefix('api');
+    app.setGlobalPrefix("api");
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: false,

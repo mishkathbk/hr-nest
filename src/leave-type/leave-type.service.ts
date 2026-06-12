@@ -46,24 +46,24 @@ export class LeaveTypeService {
       "hrm_leavetype",
       companyId,
       "leavetypecode",
-      dto.LeaveTypeCode,
+      dto.leavetypecode,
     );
 
     const record = await this.prisma.hrm_leavetype.create({
       data: {
-        leavetypecode: dto.LeaveTypeCode,
-        leavetypename: dto.LeaveTypeName,
-        leavetypecategorycd: dto.LeaveTypeCategoryCd ?? null,
-        leavetypecd: dto.LeaveTypeCd ?? null,
-        maximumleavedays: dto.MaximumLeaveDays ?? null,
-        daysbeforeleave: dto.DaysBeforeLeave ?? null,
-        isdocumentmandatory: dto.IsDocumentMandatory ?? null,
-        statuscd: dto.StatusCd ?? STATUS_ACTIVE,
+        leavetypecode: dto.leavetypecode,
+        leavetypename: dto.leavetypename,
+        leavetypecategorycd: dto.leavetypecategorycd ?? null,
+        leavetypecd: dto.leavetypecd ?? null,
+        maximumleavedays: dto.maximumleavedays ?? null,
+        daysbeforeleave: dto.daysbeforeleave ?? null,
+        isdocumentmandatory: dto.isdocumentmandatory ?? false,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
         isdeleted: false,
-        isactive: true,
+        isactive: dto.isactive ?? true,
       },
     });
 
@@ -84,7 +84,7 @@ export class LeaveTypeService {
       "hrm_leavetype",
       companyId,
       "leavetypecode",
-      dto.LeaveTypeCode,
+      dto.leavetypecode,
       "leavetypeid",
       id,
     );
@@ -92,16 +92,17 @@ export class LeaveTypeService {
     const updated = await this.prisma.hrm_leavetype.update({
       where: { leavetypeid: id },
       data: {
-        leavetypecode: dto.LeaveTypeCode,
-        leavetypename: dto.LeaveTypeName,
-        leavetypecategorycd: dto.LeaveTypeCategoryCd ?? null,
-        leavetypecd: dto.LeaveTypeCd ?? null,
-        maximumleavedays: dto.MaximumLeaveDays ?? null,
-        daysbeforeleave: dto.DaysBeforeLeave ?? null,
-        isdocumentmandatory: dto.IsDocumentMandatory ?? null,
+        leavetypecode: dto.leavetypecode,
+        leavetypename: dto.leavetypename,
+        leavetypecategorycd: dto.leavetypecategorycd ?? null,
+        leavetypecd: dto.leavetypecd ?? null,
+        maximumleavedays: dto.maximumleavedays ?? null,
+        daysbeforeleave: dto.daysbeforeleave ?? null,
+        isdocumentmandatory: dto.isdocumentmandatory ?? false,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
+        isactive: dto.isactive ?? true,
       },
     });
 
@@ -109,6 +110,27 @@ export class LeaveTypeService {
       throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
+    return updated;
+  }
+
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(
+      `UpdateActiveStatus started | id=${id}, userId=${currentId}`,
+    );
+
+    const updated = await this.prisma.hrm_leavetype.update({
+      where: { leavetypeid: id },
+      data: {
+        modifiedby: currentId,
+        modifieddate: new Date(),
+        isactive: isactive,
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     return updated;
   }
 
@@ -176,28 +198,42 @@ export class LeaveTypeService {
 
     if (search?.trim()) {
       where.OR = [
-        { leavetypecode: { contains: search } },
-        { leavetypename: { contains: search } },
+        { leavetypecode: { contains: search, mode: 'insensitive' } },
+        { leavetypename: { contains: search, mode: 'insensitive' } },
       ];
     }
 
     if (filters?.length > 0) {
       for (const item of filters) {
-        const fieldName = item.attributeName;
-        const rawValue = item.attributeValue;
+        const fieldName = item.field;
+        const rawValue = item.value;
         if (rawValue === "true" || rawValue === "false") {
           where[fieldName] = rawValue === "true";
         } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
-        } else if (!isNaN(Date.parse(rawValue))) {
+        } else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         } else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: 'insensitive' };
         }
       }
     }
-
-    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    // const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    // ── Sorting — guard against invalid/empty column names ──────────────
+    const validSortColumns = new Set([
+      "leavetypeid",
+      "leavetypecode",
+      "leavetypename",
+      "leavetypecategorycd",
+      "leavetypecd",
+      "maximumleavedays",
+      "daysbeforeleave",
+      "statuscd",
+      "createddate",
+      "modifieddate",
+    ]);
+    const safeSortBy = validSortColumns.has(sortBy) ? sortBy : "leavetypeid";
+    const orderBy: any = { [safeSortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_leavetype.findMany({
@@ -209,9 +245,44 @@ export class LeaveTypeService {
       this.prisma.hrm_leavetype.count({ where }),
     ]);
 
+    const lookupIds = [
+      ...new Set(
+        records
+          .flatMap((r) => [r.leavetypecd, r.leavetypecategorycd])
+          .filter((id): id is number => id != null),
+      ),
+    ];
+
+    const lookupMap = new Map<
+      number,
+      {
+        lookupid: number;
+        lookupname: string | null;
+        lookupnamear: string | null;
+      }
+    >();
+
+    if (lookupIds.length > 0) {
+      const lookups = await this.prisma.gen_lookup.findMany({
+        where: { lookupid: { in: lookupIds } },
+        select: { lookupid: true, lookupname: true, lookupnamear: true },
+      });
+      lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+    }
+
+    const enrichedRecords = records.map((r) => ({
+      ...r,
+      leavetypecdDTO:
+        r.leavetypecd != null ? (lookupMap.get(r.leavetypecd) ?? null) : null,
+      leavetypecategorycdDTO:
+        r.leavetypecategorycd != null
+          ? (lookupMap.get(r.leavetypecategorycd) ?? null)
+          : null,
+    }));
+
     this.logger.log(
       `ListPagination completed | count=${records.length}, totalCount=${totalCount}`,
     );
-    return new PaginatedResult(records, totalCount);
+    return new PaginatedResult(enrichedRecords, totalCount);
   }
 }

@@ -9,8 +9,9 @@ export declare class EmployeeWarningController {
     list(inactive: string, companyId: number): Promise<any[]>;
     getByKey(id: number): Promise<any>;
     saveData(dto: CreateEmployeeWarningDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -18,15 +19,15 @@ export declare class EmployeeWarningController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
-        subject: string | null;
-        employeewarningid: number;
         employeeid: number;
+        subject: string | null;
         warningmessage: string | null;
+        employeewarningid: number;
     }>;
     updateData(id: number, dto: UpdateEmployeeWarningDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -34,11 +35,10 @@ export declare class EmployeeWarningController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
-        subject: string | null;
-        employeewarningid: number;
         employeeid: number;
+        subject: string | null;
         warningmessage: string | null;
+        employeewarningid: number;
     }>;
     deleteData(id: number, currentId: number): Promise<{
         deleted: boolean;

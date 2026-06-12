@@ -4,38 +4,38 @@ import { Type } from "class-transformer";
 export class CreateSalaryTypeDto {
   @IsOptional()
   @IsString()
-  salaryTypeCode?: string;
+  salarytypecode?: string;
 
   @IsOptional()
   @IsString()
-  salaryTypeName?: string;
+  salarytypename?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  companyId?: number;
+  companyid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  salaryTypeCategoryCd?: number;
+  salarytypecategorycd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  salaryTypeCd?: number;
+  salarytypecd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  sortOrder?: number;
+  sortorder?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

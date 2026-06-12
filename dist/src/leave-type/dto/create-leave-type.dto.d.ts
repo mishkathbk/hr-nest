@@ -1,11 +1,12 @@
 export declare class CreateLeaveTypeDto {
-    LeaveTypeCode?: string;
-    LeaveTypeName?: string;
-    CompanyId?: number;
-    StatusCd?: number;
-    LeaveTypeCategoryCd?: number;
-    LeaveTypeCd?: number;
-    MaximumLeaveDays?: number;
-    DaysBeforeLeave?: number;
-    IsDocumentMandatory?: boolean;
+    leavetypecode?: string;
+    leavetypename?: string;
+    companyid?: number;
+    statuscd?: number;
+    leavetypecategorycd?: number;
+    leavetypecd?: number;
+    maximumleavedays?: number;
+    daysbeforeleave?: number;
+    isdocumentmandatory?: boolean;
+    isactive?: boolean;
 }

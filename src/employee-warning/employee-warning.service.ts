@@ -1,14 +1,10 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { PaginatedResult } from '../common/interceptors/response.interceptor';
-import { CreateEmployeeWarningDto } from './dto/create-employee-warning.dto';
-import { UpdateEmployeeWarningDto } from './dto/update-employee-warning.dto';
-import { PaginationEmployeeWarningDto } from './dto/pagination-employee-warning.dto';
-import { STATUS_ACTIVE } from '../common/constants/status.constants';
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { PaginatedResult } from "../common/interceptors/response.interceptor";
+import { CreateEmployeeWarningDto } from "./dto/create-employee-warning.dto";
+import { UpdateEmployeeWarningDto } from "./dto/update-employee-warning.dto";
+import { PaginationEmployeeWarningDto } from "./dto/pagination-employee-warning.dto";
+import { STATUS_ACTIVE } from "../common/constants/status.constants";
 
 @Injectable()
 export class EmployeeWarningService {
@@ -25,7 +21,7 @@ export class EmployeeWarningService {
       where: { employeewarningid: id },
     });
 
-    if (!record) throw new NotFoundException('Record not found');
+    if (!record) throw new NotFoundException("Record not found");
 
     const withEmployee = await this.attachEmployeeNames([record]);
 
@@ -46,11 +42,11 @@ export class EmployeeWarningService {
 
     const record = await this.prisma.hrm_employeewarning.create({
       data: {
-        employeeid: dto.employeeId,
+        employeeid: dto.employeeid,
         subject: dto.subject ?? null,
-        warningmessage: dto.warningMessage ?? null,
-        statuscd: dto.statusCd ?? STATUS_ACTIVE,
-        isactive: dto.isActive ?? true,
+        warningmessage: dto.warningmessage ?? null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
+        isactive: dto.isactive ?? true,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
@@ -58,7 +54,9 @@ export class EmployeeWarningService {
       },
     });
 
-    this.logger.log(`SaveData completed | employeewarningid=${record.employeewarningid}`);
+    this.logger.log(
+      `SaveData completed | employeewarningid=${record.employeewarningid}`,
+    );
     return record;
   }
 
@@ -75,18 +73,19 @@ export class EmployeeWarningService {
     const updated = await this.prisma.hrm_employeewarning.update({
       where: { employeewarningid: id },
       data: {
-        employeeid: dto.employeeId ?? undefined,
+        employeeid: dto.employeeid ?? undefined,
         subject: dto.subject ?? undefined,
-        warningmessage: dto.warningMessage ?? undefined,
-        statuscd: dto.statusCd ?? undefined,
-        isactive: dto.isActive ?? undefined,
+        warningmessage: dto.warningmessage ?? undefined,
+        statuscd: dto.statuscd ?? undefined,
+        isactive: dto.isactive ?? undefined,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
       },
     });
 
-    if (!updated) throw new NotFoundException('Update failed or record not found');
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
     return updated;
@@ -106,7 +105,7 @@ export class EmployeeWarningService {
       },
     });
 
-    if (!updated) throw new NotFoundException('Record not found');
+    if (!updated) throw new NotFoundException("Record not found");
 
     this.logger.log(`DeleteData completed | id=${id}`);
     return { deleted: true };
@@ -130,7 +129,7 @@ export class EmployeeWarningService {
 
     const records = await this.prisma.hrm_employeewarning.findMany({
       where,
-      orderBy: { createddate: 'desc' },
+      orderBy: { createddate: "desc" },
     });
 
     this.logger.log(`List completed | count=${records.length}`);
@@ -144,11 +143,11 @@ export class EmployeeWarningService {
     companyId: number,
   ): Promise<PaginatedResult<any>> {
     const {
-      search = '',
+      search = "",
       filters = [],
       pageNumber = 1,
       pageSize = 10,
-      sortBy = 'employeewarningid',
+      sortBy = "employeewarningid",
       isDescending = true,
     } = dto;
 
@@ -171,9 +170,9 @@ export class EmployeeWarningService {
       for (const item of filters) {
         const fieldName = item.attributeName;
         const rawValue = item.attributeValue;
-        if (rawValue === 'true' || rawValue === 'false') {
-          where[fieldName] = rawValue === 'true';
-        } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
+        if (rawValue === "true" || rawValue === "false") {
+          where[fieldName] = rawValue === "true";
+        } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
         } else if (!isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
@@ -183,7 +182,7 @@ export class EmployeeWarningService {
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? 'desc' : 'asc' };
+    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_employeewarning.findMany({
@@ -206,8 +205,10 @@ export class EmployeeWarningService {
   private async attachEmployeeNames(records: any[]) {
     if (!records || records.length === 0) return records;
 
-    const employeeIds = [...new Set(records.map((r) => r.employeeid).filter(Boolean))];
-    
+    const employeeIds = [
+      ...new Set(records.map((r) => r.employeeid).filter(Boolean)),
+    ];
+
     if (employeeIds.length === 0) return records;
 
     const employees = await this.prisma.hrm_employee.findMany({
@@ -215,7 +216,9 @@ export class EmployeeWarningService {
       select: { employeeid: true, employeename: true },
     });
 
-    const employeeMap = new Map(employees.map((e) => [e.employeeid, e.employeename]));
+    const employeeMap = new Map(
+      employees.map((e) => [e.employeeid, e.employeename]),
+    );
 
     return records.map((r) => ({
       ...r,
@@ -223,4 +226,3 @@ export class EmployeeWarningService {
     }));
   }
 }
-

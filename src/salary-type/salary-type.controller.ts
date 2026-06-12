@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   ParseIntPipe,
+  ParseBoolPipe,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -20,15 +21,16 @@ import { SalaryTypeService } from "./salary-type.service";
 import { CreateSalaryTypeDto } from "./dto/create-salary-type.dto";
 import { UpdateSalaryTypeDto } from "./dto/update-salary-type.dto";
 import { PaginationSalaryTypeDto } from "./dto/pagination-salary-type.dto";
+import { UpdateActiveStatusDto } from "./dto/updateactivestatus.dto";
 
 @Controller("hrms/salary-type")
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class SalaryTypeController {
   constructor(private readonly salaryTypeService: SalaryTypeService) {}
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // POST /api/salary-type/list/pagination
+  // POST /api/salary-type/listPagination
   // Body: { search?, filterList?, offset?, limit? }
   @Post("listPagination")
   @HttpCode(HttpStatus.OK)
@@ -51,7 +53,7 @@ export class SalaryTypeController {
   }
 
   // GET /api/salary-type/:id
-  @Get(":id")
+  @Get("GetById/:id")
   getByKey(@Param("id", ParseIntPipe) id: number) {
     return this.salaryTypeService.getByKey(id);
   }
@@ -69,7 +71,7 @@ export class SalaryTypeController {
   }
 
   // PUT /api/salary-type/:id
-  @Put(":id")
+  @Put("Update/:id")
   @ResponseMessage("Updated successfully")
   updateData(
     @Param("id", ParseIntPipe) id: number,
@@ -80,8 +82,18 @@ export class SalaryTypeController {
     return this.salaryTypeService.updateData(id, dto, currentId, companyId);
   }
 
+  @Put("UpdateActiveStatus/:id/:isactive")
+  @ResponseMessage("Status updated successfully")
+  UpdateActiveStatus(
+    @Param("id", ParseIntPipe) id: number,
+    @Param("isactive", ParseBoolPipe) isactive: boolean,
+    @CurrentUser("currentId") currentId: number,
+  ) {
+    return this.salaryTypeService.UpdateActiveStatus(id, isactive, currentId);
+  }
+
   // DELETE /api/salary-type/:id
-  @Delete(":id")
+  @Delete("Delete/:id")
   @ResponseMessage("Deleted successfully")
   deleteData(
     @Param("id", ParseIntPipe) id: number,

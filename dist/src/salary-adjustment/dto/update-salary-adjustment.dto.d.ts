@@ -1,10 +1,10 @@
 export declare class UpdateSalaryAdjustmentDto {
-    EmployeeId?: number;
-    SalaryTypeId?: number;
-    PayrollYear?: number;
-    PayrollMonth?: number;
-    Amount?: number;
-    Remarks?: string;
-    CompanyId?: number;
-    StatusCd?: number;
+    employeeid?: number;
+    salarytypeid?: number;
+    payrolldate?: string;
+    amount?: number;
+    remarks?: string;
+    companyid?: number;
+    statuscd?: number;
+    isactive?: boolean;
 }

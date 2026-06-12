@@ -1,47 +1,50 @@
-import { IsString, IsOptional, IsInt, IsBoolean } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsInt, IsBoolean } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateLeaveTypeDto {
+  @IsOptional()
+  @IsString()
+  leavetypecode?: string;
 
   @IsOptional()
   @IsString()
-  LeaveTypeCode?: string;
-
-  @IsOptional()
-  @IsString()
-  LeaveTypeName?: string;
+  leavetypename?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  CompanyId?: number;
+  companyid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  StatusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  LeaveTypeCategoryCd?: number;
+  leavetypecategorycd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  LeaveTypeCd?: number;
+  leavetypecd?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  MaximumLeaveDays?: number;
+  maximumleavedays?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  DaysBeforeLeave?: number;
+  daysbeforeleave?: number;
 
   @IsOptional()
   @IsBoolean()
-  IsDocumentMandatory?: boolean;
+  isdocumentmandatory?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isactive?: boolean;
 }

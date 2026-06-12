@@ -33,20 +33,20 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
     }
     async saveData(dto, currentId, companyId) {
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
-        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.salaryTypeCode);
+        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.salarytypecode);
         const record = await this.prisma.hrm_salarytype.create({
             data: {
-                salarytypecode: dto.salaryTypeCode,
-                salarytypename: dto.salaryTypeName,
-                salarytypecategorycd: dto.salaryTypeCategoryCd ?? null,
-                salarytypecd: dto.salaryTypeCd ?? null,
-                sortorder: dto.sortOrder ?? null,
-                statuscd: dto.statusCd ?? status_constants_1.STATUS_ACTIVE,
+                salarytypecode: dto.salarytypecode,
+                salarytypename: dto.salarytypename,
+                salarytypecategorycd: dto.salarytypecategorycd ?? null,
+                salarytypecd: dto.salarytypecd ?? null,
+                sortorder: dto.sortorder ?? null,
+                statuscd: dto.statuscd ?? status_constants_1.STATUS_ACTIVE,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
                 isdeleted: false,
-                isactive: dto.isActive ?? true,
+                isactive: dto.isactive ?? true,
             },
         });
         this.logger.log(`SaveData completed | salarytypeid=${record.salarytypeid}`);
@@ -54,24 +54,39 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
     }
     async updateData(id, dto, currentId, companyId) {
         this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
-        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.SalaryTypeCode, "salarytypeid", id);
+        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_salarytype", companyId, "salarytypecode", dto.salarytypecode, "salarytypeid", id);
         const updated = await this.prisma.hrm_salarytype.update({
             where: { salarytypeid: id },
             data: {
-                salarytypecode: dto.SalaryTypeCode,
-                salarytypename: dto.SalaryTypeName,
-                salarytypecategorycd: dto.SalaryTypeCategoryCd ?? null,
-                salarytypecd: dto.SalaryTypeCd ?? null,
-                sortorder: dto.SortOrder ?? null,
+                salarytypecode: dto.salarytypecode,
+                salarytypename: dto.salarytypename,
+                salarytypecategorycd: dto.salarytypecategorycd ?? null,
+                salarytypecd: dto.salarytypecd ?? null,
+                sortorder: dto.sortorder ?? null,
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
-                isactive: dto.isActive ?? true
+                isactive: dto.isactive ?? true,
             },
         });
         if (!updated)
             throw new common_1.NotFoundException("Update failed or record not found");
         this.logger.log(`UpdateData completed | id=${id}`);
+        return updated;
+    }
+    async UpdateActiveStatus(id, isactive, currentId) {
+        this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+        const updated = await this.prisma.hrm_salarytype.update({
+            where: { salarytypeid: id },
+            data: {
+                modifiedby: currentId,
+                modifieddate: new Date(),
+                isactive: isactive,
+            },
+        });
+        if (!updated)
+            throw new common_1.NotFoundException("Update failed or record not found");
+        this.logger.log(`UpdateActiveStatus completed | id=${id}`);
         return updated;
     }
     async deleteData(id, currentId) {
@@ -109,25 +124,25 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
         const where = { isdeleted: false, companyid: companyId };
         if (search?.trim()) {
             where.OR = [
-                { salarytypecode: { contains: search } },
-                { salarytypename: { contains: search } },
+                { salarytypecode: { contains: search, mode: 'insensitive' } },
+                { salarytypename: { contains: search, mode: 'insensitive' } },
             ];
         }
         if (filters?.length > 0) {
             for (const item of filters) {
-                const fieldName = item.attributeName;
-                const rawValue = item.attributeValue;
+                const fieldName = item.field;
+                const rawValue = item.value;
                 if (rawValue === "true" || rawValue === "false") {
                     where[fieldName] = rawValue === "true";
                 }
                 else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
                     where[fieldName] = Number(rawValue);
                 }
-                else if (!isNaN(Date.parse(rawValue))) {
+                else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
                     where[fieldName] = new Date(rawValue);
                 }
                 else {
-                    where[fieldName] = { contains: rawValue };
+                    where[fieldName] = { contains: rawValue, mode: 'insensitive' };
                 }
             }
         }
@@ -142,8 +157,28 @@ let SalaryTypeService = SalaryTypeService_1 = class SalaryTypeService {
             }),
             this.prisma.hrm_salarytype.count({ where }),
         ]);
+        const lookupIds = [
+            ...new Set(records
+                .flatMap((r) => [r.salarytypecd, r.salarytypecategorycd])
+                .filter((id) => id != null)),
+        ];
+        const lookupMap = new Map();
+        if (lookupIds.length > 0) {
+            const lookups = await this.prisma.gen_lookup.findMany({
+                where: { lookupid: { in: lookupIds } },
+                select: { lookupid: true, lookupname: true, lookupnamear: true },
+            });
+            lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+        }
+        const enrichedRecords = records.map((r) => ({
+            ...r,
+            salarytypecdDTO: r.salarytypecd != null ? (lookupMap.get(r.salarytypecd) ?? null) : null,
+            salarytypecategorycdDTO: r.salarytypecategorycd != null
+                ? (lookupMap.get(r.salarytypecategorycd) ?? null)
+                : null,
+        }));
         this.logger.log(`ListPagination completed | count=${records.length}, totalCount=${totalCount}`);
-        return new response_interceptor_1.PaginatedResult(records, totalCount);
+        return new response_interceptor_1.PaginatedResult(enrichedRecords, totalCount);
     }
 };
 exports.SalaryTypeService = SalaryTypeService;

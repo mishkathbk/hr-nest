@@ -1,8 +1,9 @@
 export declare class UpdateLeaveCalendarDto {
-    LeaveCode: string;
-    LeaveName: string;
-    FromDate: string;
-    ToDate: string;
-    StatusCd?: number;
-    Description?: string;
+    leavecode: string;
+    leavename: string;
+    fromdate: string;
+    todate: string;
+    statuscd?: number;
+    description?: string;
+    isactive?: boolean;
 }

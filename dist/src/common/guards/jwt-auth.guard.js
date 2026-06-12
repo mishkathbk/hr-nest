@@ -11,20 +11,37 @@ const common_1 = require("@nestjs/common");
 const jwt = require("jsonwebtoken");
 let JwtAuthGuard = class JwtAuthGuard {
     canActivate(context) {
+        const secret = process.env.JWT_SECRET;
+        const issuer = process.env.JWT_ISSUER;
+        const audience = process.env.JWT_AUDIENCE;
+        if (!secret) {
+            throw new common_1.InternalServerErrorException("JWT_SECRET is not configured");
+        }
         const request = context.switchToHttp().getRequest();
-        const authHeader = request.headers['authorization'];
-        const token = authHeader?.split(' ')[1];
+        const authHeader = request.headers["authorization"];
+        const token = authHeader?.split(" ")[1];
         if (!token) {
-            throw new common_1.UnauthorizedException('Access token is required');
+            throw new common_1.UnauthorizedException("Access token is required");
         }
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            request.currentId = decoded.userId;
-            request.companyId = decoded.companyId;
+            const decoded = jwt.verify(token, secret, {
+                issuer,
+                audience,
+            });
+            request.currentId = Number(decoded["userid"]);
+            request.companyId = Number(decoded["companyid"]);
+            request.branchId = Number(decoded["branchid"]);
+            request.username = String(decoded["username"]);
             return true;
         }
-        catch {
-            throw new common_1.ForbiddenException('Invalid or expired token');
+        catch (err) {
+            if (err instanceof jwt.TokenExpiredError) {
+                throw new common_1.UnauthorizedException("Access token has expired");
+            }
+            if (err instanceof jwt.JsonWebTokenError) {
+                throw new common_1.ForbiddenException("Invalid access token");
+            }
+            throw err;
         }
     }
 };

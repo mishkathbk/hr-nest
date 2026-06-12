@@ -1,10 +1,10 @@
-import { IsString, IsOptional, IsInt, IsBoolean } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsInt, IsBoolean } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateEmployeeWarningDto {
   @IsInt()
   @Type(() => Number)
-  employeeId: number;
+  employeeid: number;
 
   @IsOptional()
   @IsString()
@@ -12,14 +12,14 @@ export class CreateEmployeeWarningDto {
 
   @IsOptional()
   @IsString()
-  warningMessage?: string;
+  warningmessage?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

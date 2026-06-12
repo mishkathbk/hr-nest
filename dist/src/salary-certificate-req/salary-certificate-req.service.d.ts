@@ -8,8 +8,9 @@ export declare class SalaryCertificateReqService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -17,7 +18,6 @@ export declare class SalaryCertificateReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -25,8 +25,9 @@ export declare class SalaryCertificateReqService {
         approvedby: string | null;
     }>;
     saveData(dto: CreateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -34,7 +35,6 @@ export declare class SalaryCertificateReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -42,8 +42,9 @@ export declare class SalaryCertificateReqService {
         approvedby: string | null;
     }>;
     updateData(id: number, dto: UpdateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -51,7 +52,6 @@ export declare class SalaryCertificateReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -62,8 +62,9 @@ export declare class SalaryCertificateReqService {
         deleted: boolean;
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -71,7 +72,6 @@ export declare class SalaryCertificateReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;

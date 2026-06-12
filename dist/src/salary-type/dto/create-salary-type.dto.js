@@ -19,45 +19,45 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateSalaryTypeDto.prototype, "salaryTypeCode", void 0);
+], CreateSalaryTypeDto.prototype, "salarytypecode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateSalaryTypeDto.prototype, "salaryTypeName", void 0);
+], CreateSalaryTypeDto.prototype, "salarytypename", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateSalaryTypeDto.prototype, "companyId", void 0);
+], CreateSalaryTypeDto.prototype, "companyid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateSalaryTypeDto.prototype, "statusCd", void 0);
+], CreateSalaryTypeDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateSalaryTypeDto.prototype, "salaryTypeCategoryCd", void 0);
+], CreateSalaryTypeDto.prototype, "salarytypecategorycd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateSalaryTypeDto.prototype, "salaryTypeCd", void 0);
+], CreateSalaryTypeDto.prototype, "salarytypecd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateSalaryTypeDto.prototype, "sortOrder", void 0);
+], CreateSalaryTypeDto.prototype, "sortorder", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], CreateSalaryTypeDto.prototype, "isActive", void 0);
+], CreateSalaryTypeDto.prototype, "isactive", void 0);
 //# sourceMappingURL=create-salary-type.dto.js.map

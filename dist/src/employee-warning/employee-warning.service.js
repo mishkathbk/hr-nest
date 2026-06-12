@@ -26,7 +26,7 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
             where: { employeewarningid: id },
         });
         if (!record)
-            throw new common_1.NotFoundException('Record not found');
+            throw new common_1.NotFoundException("Record not found");
         const withEmployee = await this.attachEmployeeNames([record]);
         this.logger.log(`GetByKey completed | id=${id}`);
         return withEmployee[0];
@@ -35,11 +35,11 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
         const record = await this.prisma.hrm_employeewarning.create({
             data: {
-                employeeid: dto.employeeId,
+                employeeid: dto.employeeid,
                 subject: dto.subject ?? null,
-                warningmessage: dto.warningMessage ?? null,
-                statuscd: dto.statusCd ?? status_constants_1.STATUS_ACTIVE,
-                isactive: dto.isActive ?? true,
+                warningmessage: dto.warningmessage ?? null,
+                statuscd: dto.statuscd ?? status_constants_1.STATUS_ACTIVE,
+                isactive: dto.isactive ?? true,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
@@ -54,18 +54,18 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
         const updated = await this.prisma.hrm_employeewarning.update({
             where: { employeewarningid: id },
             data: {
-                employeeid: dto.employeeId ?? undefined,
+                employeeid: dto.employeeid ?? undefined,
                 subject: dto.subject ?? undefined,
-                warningmessage: dto.warningMessage ?? undefined,
-                statuscd: dto.statusCd ?? undefined,
-                isactive: dto.isActive ?? undefined,
+                warningmessage: dto.warningmessage ?? undefined,
+                statuscd: dto.statuscd ?? undefined,
+                isactive: dto.isactive ?? undefined,
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
             },
         });
         if (!updated)
-            throw new common_1.NotFoundException('Update failed or record not found');
+            throw new common_1.NotFoundException("Update failed or record not found");
         this.logger.log(`UpdateData completed | id=${id}`);
         return updated;
     }
@@ -80,7 +80,7 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
             },
         });
         if (!updated)
-            throw new common_1.NotFoundException('Record not found');
+            throw new common_1.NotFoundException("Record not found");
         this.logger.log(`DeleteData completed | id=${id}`);
         return { deleted: true };
     }
@@ -95,13 +95,13 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
         }
         const records = await this.prisma.hrm_employeewarning.findMany({
             where,
-            orderBy: { createddate: 'desc' },
+            orderBy: { createddate: "desc" },
         });
         this.logger.log(`List completed | count=${records.length}`);
         return await this.attachEmployeeNames(records);
     }
     async listPagination(dto, companyId) {
-        const { search = '', filters = [], pageNumber = 1, pageSize = 10, sortBy = 'employeewarningid', isDescending = true, } = dto;
+        const { search = "", filters = [], pageNumber = 1, pageSize = 10, sortBy = "employeewarningid", isDescending = true, } = dto;
         const skip = (pageNumber - 1) * pageSize;
         this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, page=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy}, isDescending=${isDescending}`);
         const where = { isdeleted: false, companyid: companyId };
@@ -115,10 +115,10 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
             for (const item of filters) {
                 const fieldName = item.attributeName;
                 const rawValue = item.attributeValue;
-                if (rawValue === 'true' || rawValue === 'false') {
-                    where[fieldName] = rawValue === 'true';
+                if (rawValue === "true" || rawValue === "false") {
+                    where[fieldName] = rawValue === "true";
                 }
-                else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
+                else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
                     where[fieldName] = Number(rawValue);
                 }
                 else if (!isNaN(Date.parse(rawValue))) {
@@ -129,7 +129,7 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
                 }
             }
         }
-        const orderBy = { [sortBy]: isDescending ? 'desc' : 'asc' };
+        const orderBy = { [sortBy]: isDescending ? "desc" : "asc" };
         const [records, totalCount] = await this.prisma.$transaction([
             this.prisma.hrm_employeewarning.findMany({
                 where,
@@ -146,7 +146,9 @@ let EmployeeWarningService = EmployeeWarningService_1 = class EmployeeWarningSer
     async attachEmployeeNames(records) {
         if (!records || records.length === 0)
             return records;
-        const employeeIds = [...new Set(records.map((r) => r.employeeid).filter(Boolean))];
+        const employeeIds = [
+            ...new Set(records.map((r) => r.employeeid).filter(Boolean)),
+        ];
         if (employeeIds.length === 0)
             return records;
         const employees = await this.prisma.hrm_employee.findMany({

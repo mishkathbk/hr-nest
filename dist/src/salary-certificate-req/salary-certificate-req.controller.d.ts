@@ -7,8 +7,9 @@ export declare class SalaryCertificateReqController {
     constructor(salaryCertificateReqService: SalaryCertificateReqService);
     listPagination(dto: PaginationSalaryCertificateReqDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
     list(inactive: string, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -16,7 +17,6 @@ export declare class SalaryCertificateReqController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -24,8 +24,9 @@ export declare class SalaryCertificateReqController {
         approvedby: string | null;
     }[]>;
     getByKey(id: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -33,7 +34,6 @@ export declare class SalaryCertificateReqController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -41,8 +41,9 @@ export declare class SalaryCertificateReqController {
         approvedby: string | null;
     }>;
     saveData(dto: CreateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -50,7 +51,6 @@ export declare class SalaryCertificateReqController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;
@@ -58,8 +58,9 @@ export declare class SalaryCertificateReqController {
         approvedby: string | null;
     }>;
     updateData(id: number, dto: UpdateSalaryCertificateReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -67,7 +68,6 @@ export declare class SalaryCertificateReqController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         passporto: string | null;
         reqid: number;
         reqno: string;

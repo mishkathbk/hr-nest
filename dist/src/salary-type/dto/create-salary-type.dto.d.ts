@@ -1,10 +1,10 @@
 export declare class CreateSalaryTypeDto {
-    salaryTypeCode?: string;
-    salaryTypeName?: string;
-    companyId?: number;
-    statusCd?: number;
-    salaryTypeCategoryCd?: number;
-    salaryTypeCd?: number;
-    sortOrder?: number;
-    isActive?: boolean;
+    salarytypecode?: string;
+    salarytypename?: string;
+    companyid?: number;
+    statuscd?: number;
+    salarytypecategorycd?: number;
+    salarytypecd?: number;
+    sortorder?: number;
+    isactive?: boolean;
 }

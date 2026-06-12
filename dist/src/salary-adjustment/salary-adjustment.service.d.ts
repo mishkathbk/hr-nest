@@ -8,9 +8,10 @@ export declare class SalaryAdjustmentService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -18,7 +19,6 @@ export declare class SalaryAdjustmentService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -27,9 +27,10 @@ export declare class SalaryAdjustmentService {
         remarks: string | null;
     }>;
     saveData(dto: CreateSalaryAdjustmentDto, currentId: number, companyId: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -37,7 +38,6 @@ export declare class SalaryAdjustmentService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -46,9 +46,10 @@ export declare class SalaryAdjustmentService {
         remarks: string | null;
     }>;
     updateData(id: number, dto: UpdateSalaryAdjustmentDto, currentId: number, companyId: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -56,7 +57,6 @@ export declare class SalaryAdjustmentService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -68,9 +68,10 @@ export declare class SalaryAdjustmentService {
         deleted: boolean;
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -78,7 +79,6 @@ export declare class SalaryAdjustmentService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;

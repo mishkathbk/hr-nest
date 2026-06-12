@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SalaryTypeController = void 0;
 const common_1 = require("@nestjs/common");
+const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
 const user_decorator_1 = require("../common/decorators/user.decorator");
 const response_message_decorator_1 = require("../common/decorators/response-message.decorator");
 const salary_type_service_1 = require("./salary-type.service");
@@ -39,6 +40,9 @@ let SalaryTypeController = class SalaryTypeController {
     updateData(id, dto, currentId, companyId) {
         return this.salaryTypeService.updateData(id, dto, currentId, companyId);
     }
+    UpdateActiveStatus(id, isactive, currentId) {
+        return this.salaryTypeService.UpdateActiveStatus(id, isactive, currentId);
+    }
     deleteData(id, currentId) {
         return this.salaryTypeService.deleteData(id, currentId);
     }
@@ -62,7 +66,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SalaryTypeController.prototype, "list", null);
 __decorate([
-    (0, common_1.Get)(":id"),
+    (0, common_1.Get)("GetById/:id"),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -80,7 +84,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SalaryTypeController.prototype, "saveData", null);
 __decorate([
-    (0, common_1.Put)(":id"),
+    (0, common_1.Put)("Update/:id"),
     (0, response_message_decorator_1.ResponseMessage)("Updated successfully"),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
@@ -91,7 +95,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SalaryTypeController.prototype, "updateData", null);
 __decorate([
-    (0, common_1.Delete)(":id"),
+    (0, common_1.Put)("UpdateActiveStatus/:id/:isactive"),
+    (0, response_message_decorator_1.ResponseMessage)("Status updated successfully"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Param)("isactive", common_1.ParseBoolPipe)),
+    __param(2, (0, user_decorator_1.CurrentUser)("currentId")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Boolean, Number]),
+    __metadata("design:returntype", void 0)
+], SalaryTypeController.prototype, "UpdateActiveStatus", null);
+__decorate([
+    (0, common_1.Delete)("Delete/:id"),
     (0, response_message_decorator_1.ResponseMessage)("Deleted successfully"),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __param(1, (0, user_decorator_1.CurrentUser)("currentId")),
@@ -101,6 +115,7 @@ __decorate([
 ], SalaryTypeController.prototype, "deleteData", null);
 exports.SalaryTypeController = SalaryTypeController = __decorate([
     (0, common_1.Controller)("hrms/salary-type"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [salary_type_service_1.SalaryTypeService])
 ], SalaryTypeController);
 //# sourceMappingURL=salary-type.controller.js.map

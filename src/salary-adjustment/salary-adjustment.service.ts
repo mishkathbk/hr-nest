@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 
 import { PaginatedResult } from "../common/interceptors/response.interceptor";
@@ -43,13 +39,13 @@ export class SalaryAdjustmentService {
 
     const record = await this.prisma.hrm_salaryadjustment.create({
       data: {
-        employeeid: dto.EmployeeId ?? 0,
-        salarytypeid: dto.SalaryTypeId ?? 0,
-        payrollyear: dto.PayrollYear ?? new Date().getFullYear(),
-        payrollmonth: dto.PayrollMonth ?? new Date().getMonth() + 1,
-        amount: dto.Amount ?? null,
-        remarks: dto.Remarks ?? null,
-        statuscd: dto.StatusCd ?? STATUS_ACTIVE,
+        employeeid: dto.employeeid ?? 0,
+        salarytypeid: dto.salaryTypeid ?? 0,
+        payrollyear: dto.payrolldate ? new Date(dto.payrolldate).getFullYear() : new Date().getFullYear(),
+        payrollmonth: dto.payrolldate ? new Date(dto.payrolldate).getMonth() + 1 : new Date().getMonth() + 1,
+        amount: dto.amount ?? null,
+        remarks: dto.remarks ?? null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
@@ -58,7 +54,9 @@ export class SalaryAdjustmentService {
       },
     });
 
-    this.logger.log(`SaveData completed | salaryadjustmentid=${record.salaryadjustmentid}`);
+    this.logger.log(
+      `SaveData completed | salaryadjustmentid=${record.salaryadjustmentid}`,
+    );
     return record;
   }
 
@@ -74,13 +72,13 @@ export class SalaryAdjustmentService {
     const updated = await this.prisma.hrm_salaryadjustment.update({
       where: { salaryadjustmentid: id },
       data: {
-        employeeid: dto.EmployeeId,
-        salarytypeid: dto.SalaryTypeId,
-        payrollyear: dto.PayrollYear,
-        payrollmonth: dto.PayrollMonth,
-        amount: dto.Amount,
-        remarks: dto.Remarks,
-        statuscd: dto.StatusCd,
+        employeeid: dto.employeeid,
+        salarytypeid: dto.salarytypeid,
+        payrollyear: dto.payrolldate ? new Date(dto.payrolldate).getFullYear() : undefined,
+        payrollmonth: dto.payrolldate ? new Date(dto.payrolldate).getMonth() + 1 : undefined,
+        amount: dto.amount,
+        remarks: dto.remarks,
+        statuscd: dto.statuscd,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
@@ -156,9 +154,7 @@ export class SalaryAdjustmentService {
     const where: any = { isdeleted: false, companyid: companyId };
 
     if (search?.trim()) {
-      where.OR = [
-        { remarks: { contains: search } },
-      ];
+      where.OR = [{ remarks: { contains: search } }];
     }
 
     if (filters?.length > 0) {

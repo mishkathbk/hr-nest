@@ -19,7 +19,7 @@ __decorate([
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateEmployeeWarningDto.prototype, "employeeId", void 0);
+], CreateEmployeeWarningDto.prototype, "employeeid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -29,16 +29,16 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateEmployeeWarningDto.prototype, "warningMessage", void 0);
+], CreateEmployeeWarningDto.prototype, "warningmessage", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateEmployeeWarningDto.prototype, "statusCd", void 0);
+], CreateEmployeeWarningDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], CreateEmployeeWarningDto.prototype, "isActive", void 0);
+], CreateEmployeeWarningDto.prototype, "isactive", void 0);
 //# sourceMappingURL=create-employee-warning.dto.js.map

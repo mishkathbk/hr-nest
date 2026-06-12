@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsInt, IsDateString } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsInt, IsDateString, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 /**
@@ -13,26 +13,30 @@ import { Type } from 'class-transformer';
 export class CreateLeaveCalendarDto {
   @IsString()
   @IsNotEmpty({ message: 'LeaveCode is required' })
-  LeaveCode: string;
+  leavecode: string;
 
   @IsString()
   @IsNotEmpty({ message: 'LeaveName is required' })
-  LeaveName: string;
+  leavename: string;
 
   @IsDateString({}, { message: 'FromDate must be a valid ISO date string' })
   @IsNotEmpty({ message: 'FromDate is required' })
-  FromDate: string;
+  fromdate: string;
 
   @IsDateString({}, { message: 'ToDate must be a valid ISO date string' })
   @IsNotEmpty({ message: 'ToDate is required' })
-  ToDate: string;
+  todate: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  StatusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsString()
-  Description?: string;
+  description?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isactive?: boolean;
 }

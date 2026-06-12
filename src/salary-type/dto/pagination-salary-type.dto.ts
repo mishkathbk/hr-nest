@@ -11,14 +11,18 @@ import { Type } from 'class-transformer';
 
 /**
  * Represents a single filter entry from the filters array.
- * e.g. { attributeName: "statuscd", attributeValue: "1" }
+ * e.g. { field: "statuscd", value: "1", condition: 1 }
  */
 export class FilterItemDto {
   @IsString()
-  attributeName: string;
+  field: string;
 
   @IsString()
-  attributeValue: string;
+  value: string;
+
+  @IsOptional()
+  @IsInt()
+  condition?: number; // 1 = contains, 2 = equals, etc. (reserved for future use)
 }
 
 /**

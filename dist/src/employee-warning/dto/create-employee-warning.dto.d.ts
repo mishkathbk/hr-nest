@@ -1,7 +1,7 @@
 export declare class CreateEmployeeWarningDto {
-    employeeId: number;
+    employeeid: number;
     subject?: string;
-    warningMessage?: string;
-    statusCd?: number;
-    isActive?: boolean;
+    warningmessage?: string;
+    statuscd?: number;
+    isactive?: boolean;
 }

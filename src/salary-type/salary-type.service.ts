@@ -11,6 +11,7 @@ import { PaginatedResult } from "../common/interceptors/response.interceptor";
 import { CreateSalaryTypeDto } from "./dto/create-salary-type.dto";
 import { UpdateSalaryTypeDto } from "./dto/update-salary-type.dto";
 import { PaginationSalaryTypeDto } from "./dto/pagination-salary-type.dto";
+import { UpdateActiveStatusDto } from "./dto/updateactivestatus.dto";
 import { STATUS_ACTIVE } from "../common/constants/status.constants";
 
 @Injectable()
@@ -48,22 +49,22 @@ export class SalaryTypeService {
       "hrm_salarytype",
       companyId,
       "salarytypecode",
-      dto.salaryTypeCode,
+      dto.salarytypecode,
     );
 
     const record = await this.prisma.hrm_salarytype.create({
       data: {
-        salarytypecode: dto.salaryTypeCode,
-        salarytypename: dto.salaryTypeName,
-        salarytypecategorycd: dto.salaryTypeCategoryCd ?? null,
-        salarytypecd: dto.salaryTypeCd ?? null,
-        sortorder: dto.sortOrder ?? null,
-        statuscd: dto.statusCd ?? STATUS_ACTIVE,
+        salarytypecode: dto.salarytypecode,
+        salarytypename: dto.salarytypename,
+        salarytypecategorycd: dto.salarytypecategorycd ?? null,
+        salarytypecd: dto.salarytypecd ?? null,
+        sortorder: dto.sortorder ?? null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
         isdeleted: false,
-        isactive: dto.isActive ?? true,
+        isactive: dto.isactive ?? true,
       },
     });
 
@@ -85,7 +86,7 @@ export class SalaryTypeService {
       "hrm_salarytype",
       companyId,
       "salarytypecode",
-      dto.SalaryTypeCode,
+      dto.salarytypecode,
       "salarytypeid",
       id,
     );
@@ -93,15 +94,15 @@ export class SalaryTypeService {
     const updated = await this.prisma.hrm_salarytype.update({
       where: { salarytypeid: id },
       data: {
-        salarytypecode: dto.SalaryTypeCode,
-        salarytypename: dto.SalaryTypeName,
-        salarytypecategorycd: dto.SalaryTypeCategoryCd ?? null,
-        salarytypecd: dto.SalaryTypeCd ?? null,
-        sortorder: dto.SortOrder ?? null,
+        salarytypecode: dto.salarytypecode,
+        salarytypename: dto.salarytypename,
+        salarytypecategorycd: dto.salarytypecategorycd ?? null,
+        salarytypecd: dto.salarytypecd ?? null,
+        sortorder: dto.sortorder ?? null,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
-        isactive: dto.isActive ?? true
+        isactive: dto.isactive ?? true,
       },
     });
 
@@ -109,6 +110,26 @@ export class SalaryTypeService {
       throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
+    return updated;
+  }
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(
+      `UpdateActiveStatus started | id=${id}, userId=${currentId}`,
+    );
+
+    const updated = await this.prisma.hrm_salarytype.update({
+      where: { salarytypeid: id },
+      data: {
+        modifiedby: currentId,
+        modifieddate: new Date(),
+        isactive: isactive,
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     return updated;
   }
 
@@ -175,16 +196,16 @@ export class SalaryTypeService {
     // ── Full-text search across code and name ──────────────────────────
     if (search?.trim()) {
       where.OR = [
-        { salarytypecode: { contains: search } },
-        { salarytypename: { contains: search } },
+        { salarytypecode: { contains: search, mode: 'insensitive' } },
+        { salarytypename: { contains: search, mode: 'insensitive' } },
       ];
     }
 
     // ── Additional key-value filters ───────────────────────────────────
     if (filters?.length > 0) {
       for (const item of filters) {
-        const fieldName = item.attributeName;
-        const rawValue = item.attributeValue;
+        const fieldName = item.field;
+        const rawValue = item.value;
 
         // Boolean fields
         if (rawValue === "true" || rawValue === "false") {
@@ -194,20 +215,20 @@ export class SalaryTypeService {
         else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
         }
-        // Date fields (ISO format)
-        else if (!isNaN(Date.parse(rawValue))) {
+        // Date fields (ISO format) — only when value is not numeric
+        else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         }
         // String fields — partial match
         else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: 'insensitive' };
         }
       }
     }
 
     // ── Sorting ────────────────────────────────────────────────────────
     const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
-    console.log("orderBy:::",orderBy)
+    console.log("orderBy:::", orderBy);
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_salarytype.findMany({
         where,
@@ -218,10 +239,45 @@ export class SalaryTypeService {
       this.prisma.hrm_salarytype.count({ where }),
     ]);
 
+    // ── Enrich with gen_lookup data for salarytypecd & salarytypecategorycd ──
+    const lookupIds = [
+      ...new Set(
+        records
+          .flatMap((r) => [r.salarytypecd, r.salarytypecategorycd])
+          .filter((id): id is number => id != null),
+      ),
+    ];
+
+    const lookupMap = new Map<
+      number,
+      {
+        lookupid: number;
+        lookupname: string | null;
+        lookupnamear: string | null;
+      }
+    >();
+
+    if (lookupIds.length > 0) {
+      const lookups = await this.prisma.gen_lookup.findMany({
+        where: { lookupid: { in: lookupIds } },
+        select: { lookupid: true, lookupname: true, lookupnamear: true },
+      });
+      lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+    }
+
+    const enrichedRecords = records.map((r) => ({
+      ...r,
+      salarytypecdDTO:
+        r.salarytypecd != null ? (lookupMap.get(r.salarytypecd) ?? null) : null,
+      salarytypecategorycdDTO:
+        r.salarytypecategorycd != null
+          ? (lookupMap.get(r.salarytypecategorycd) ?? null)
+          : null,
+    }));
+
     this.logger.log(
       `ListPagination completed | count=${records.length}, totalCount=${totalCount}`,
     );
-    return new PaginatedResult(records, totalCount);
+    return new PaginatedResult(enrichedRecords, totalCount);
   }
-
 }

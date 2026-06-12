@@ -9,8 +9,9 @@ export declare class MemoService {
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<any>;
     saveData(dto: CreateMemoDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -18,7 +19,6 @@ export declare class MemoService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;
@@ -27,8 +27,9 @@ export declare class MemoService {
         memotext: string | null;
     }>;
     updateData(id: number, dto: UpdateMemoDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -36,7 +37,6 @@ export declare class MemoService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         documentgroupid: number | null;
         memoid: number;
         memocode: string;

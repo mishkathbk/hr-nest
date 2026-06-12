@@ -34,13 +34,13 @@ let SalaryAdjustmentService = SalaryAdjustmentService_1 = class SalaryAdjustment
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
         const record = await this.prisma.hrm_salaryadjustment.create({
             data: {
-                employeeid: dto.EmployeeId ?? 0,
-                salarytypeid: dto.SalaryTypeId ?? 0,
-                payrollyear: dto.PayrollYear ?? new Date().getFullYear(),
-                payrollmonth: dto.PayrollMonth ?? new Date().getMonth() + 1,
-                amount: dto.Amount ?? null,
-                remarks: dto.Remarks ?? null,
-                statuscd: dto.StatusCd ?? status_constants_1.STATUS_ACTIVE,
+                employeeid: dto.employeeid ?? 0,
+                salarytypeid: dto.salaryTypeid ?? 0,
+                payrollyear: dto.payrolldate ? new Date(dto.payrolldate).getFullYear() : new Date().getFullYear(),
+                payrollmonth: dto.payrolldate ? new Date(dto.payrolldate).getMonth() + 1 : new Date().getMonth() + 1,
+                amount: dto.amount ?? null,
+                remarks: dto.remarks ?? null,
+                statuscd: dto.statuscd ?? status_constants_1.STATUS_ACTIVE,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
@@ -56,13 +56,13 @@ let SalaryAdjustmentService = SalaryAdjustmentService_1 = class SalaryAdjustment
         const updated = await this.prisma.hrm_salaryadjustment.update({
             where: { salaryadjustmentid: id },
             data: {
-                employeeid: dto.EmployeeId,
-                salarytypeid: dto.SalaryTypeId,
-                payrollyear: dto.PayrollYear,
-                payrollmonth: dto.PayrollMonth,
-                amount: dto.Amount,
-                remarks: dto.Remarks,
-                statuscd: dto.StatusCd,
+                employeeid: dto.employeeid,
+                salarytypeid: dto.salarytypeid,
+                payrollyear: dto.payrolldate ? new Date(dto.payrolldate).getFullYear() : undefined,
+                payrollmonth: dto.payrolldate ? new Date(dto.payrolldate).getMonth() + 1 : undefined,
+                amount: dto.amount,
+                remarks: dto.remarks,
+                statuscd: dto.statuscd,
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
@@ -108,9 +108,7 @@ let SalaryAdjustmentService = SalaryAdjustmentService_1 = class SalaryAdjustment
         this.logger.log(`ListPagination started | companyId=${companyId}, search=${search}, page=${pageNumber}, pageSize=${pageSize}, sortBy=${sortBy}, isDescending=${isDescending}`);
         const where = { isdeleted: false, companyid: companyId };
         if (search?.trim()) {
-            where.OR = [
-                { remarks: { contains: search } },
-            ];
+            where.OR = [{ remarks: { contains: search } }];
         }
         if (filters?.length > 0) {
             for (const item of filters) {

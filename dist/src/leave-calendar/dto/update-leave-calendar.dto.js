@@ -17,33 +17,38 @@ class UpdateLeaveCalendarDto {
 exports.UpdateLeaveCalendarDto = UpdateLeaveCalendarDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'LeaveCode is required' }),
+    (0, class_validator_1.IsNotEmpty)({ message: "LeaveCode is required" }),
     __metadata("design:type", String)
-], UpdateLeaveCalendarDto.prototype, "LeaveCode", void 0);
+], UpdateLeaveCalendarDto.prototype, "leavecode", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'LeaveName is required' }),
+    (0, class_validator_1.IsNotEmpty)({ message: "LeaveName is required" }),
     __metadata("design:type", String)
-], UpdateLeaveCalendarDto.prototype, "LeaveName", void 0);
+], UpdateLeaveCalendarDto.prototype, "leavename", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)({}, { message: 'FromDate must be a valid ISO date string' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'FromDate is required' }),
+    (0, class_validator_1.IsDateString)({}, { message: "FromDate must be a valid ISO date string" }),
+    (0, class_validator_1.IsNotEmpty)({ message: "FromDate is required" }),
     __metadata("design:type", String)
-], UpdateLeaveCalendarDto.prototype, "FromDate", void 0);
+], UpdateLeaveCalendarDto.prototype, "fromdate", void 0);
 __decorate([
-    (0, class_validator_1.IsDateString)({}, { message: 'ToDate must be a valid ISO date string' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'ToDate is required' }),
+    (0, class_validator_1.IsDateString)({}, { message: "ToDate must be a valid ISO date string" }),
+    (0, class_validator_1.IsNotEmpty)({ message: "ToDate is required" }),
     __metadata("design:type", String)
-], UpdateLeaveCalendarDto.prototype, "ToDate", void 0);
+], UpdateLeaveCalendarDto.prototype, "todate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateLeaveCalendarDto.prototype, "StatusCd", void 0);
+], UpdateLeaveCalendarDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateLeaveCalendarDto.prototype, "Description", void 0);
+], UpdateLeaveCalendarDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], UpdateLeaveCalendarDto.prototype, "isactive", void 0);
 //# sourceMappingURL=update-leave-calendar.dto.js.map

@@ -78,6 +78,24 @@ export declare class SalaryTypeController {
         deletedate: Date | null;
         statuscd: number | null;
     }>;
+    UpdateActiveStatus(id: number, isactive: boolean, currentId: number): Promise<{
+        salarytypeid: number;
+        salarytypecode: string | null;
+        salarytypename: string | null;
+        companyid: number | null;
+        isactive: boolean;
+        createdby: number | null;
+        createddate: Date | null;
+        modifiedby: number | null;
+        modifieddate: Date | null;
+        salarytypecategorycd: number | null;
+        salarytypecd: number | null;
+        sortorder: number | null;
+        isdeleted: boolean | null;
+        deleteby: number | null;
+        deletedate: Date | null;
+        statuscd: number | null;
+    }>;
     deleteData(id: number, currentId: number): Promise<{
         deleted: boolean;
     }>;

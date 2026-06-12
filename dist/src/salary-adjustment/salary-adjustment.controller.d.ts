@@ -7,9 +7,10 @@ export declare class SalaryAdjustmentController {
     constructor(salaryAdjustmentService: SalaryAdjustmentService);
     listPagination(dto: PaginationSalaryAdjustmentDto, companyId: number): Promise<import("../common/interceptors/response.interceptor").PaginatedResult<any>>;
     list(inactive: string, companyId: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -17,7 +18,6 @@ export declare class SalaryAdjustmentController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -26,9 +26,10 @@ export declare class SalaryAdjustmentController {
         remarks: string | null;
     }[]>;
     getByKey(id: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -36,7 +37,6 @@ export declare class SalaryAdjustmentController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -45,9 +45,10 @@ export declare class SalaryAdjustmentController {
         remarks: string | null;
     }>;
     saveData(dto: CreateSalaryAdjustmentDto, currentId: number, companyId: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -55,7 +56,6 @@ export declare class SalaryAdjustmentController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;
@@ -64,9 +64,10 @@ export declare class SalaryAdjustmentController {
         remarks: string | null;
     }>;
     updateData(id: number, dto: UpdateSalaryAdjustmentDto, currentId: number, companyId: number): Promise<{
-        salarytypeid: number;
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
+        salarytypeid: number;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -74,7 +75,6 @@ export declare class SalaryAdjustmentController {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         employeeid: number;
         payrollyear: number;
         payrollmonth: number;

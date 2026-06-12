@@ -8,8 +8,9 @@ export declare class SalaryAdvanceReqService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getByKey(id: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -17,7 +18,6 @@ export declare class SalaryAdvanceReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         reqid: number;
         reqno: string;
         reason: string | null;
@@ -26,8 +26,9 @@ export declare class SalaryAdvanceReqService {
         salaryadvanceamountreq: import("@prisma/client-runtime-utils").Decimal | null;
     }>;
     saveData(dto: CreateSalaryAdvanceReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -35,7 +36,6 @@ export declare class SalaryAdvanceReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         reqid: number;
         reqno: string;
         reason: string | null;
@@ -44,8 +44,9 @@ export declare class SalaryAdvanceReqService {
         salaryadvanceamountreq: import("@prisma/client-runtime-utils").Decimal | null;
     }>;
     updateData(id: number, dto: UpdateSalaryAdvanceReqDto, currentId: number, companyId: number): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -53,7 +54,6 @@ export declare class SalaryAdvanceReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         reqid: number;
         reqno: string;
         reason: string | null;
@@ -65,8 +65,9 @@ export declare class SalaryAdvanceReqService {
         deleted: boolean;
     }>;
     list(companyId: number, isInactiveLoad?: boolean): Promise<{
-        companyid: number | null;
+        statuscd: number | null;
         isactive: boolean;
+        companyid: number | null;
         createdby: number | null;
         createddate: Date | null;
         modifiedby: number | null;
@@ -74,7 +75,6 @@ export declare class SalaryAdvanceReqService {
         isdeleted: boolean | null;
         deleteby: number | null;
         deletedate: Date | null;
-        statuscd: number | null;
         reqid: number;
         reqno: string;
         reason: string | null;
