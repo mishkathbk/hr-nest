@@ -18,11 +18,16 @@ exports.FilterItemDto = FilterItemDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], FilterItemDto.prototype, "attributeName", void 0);
+], FilterItemDto.prototype, "field", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], FilterItemDto.prototype, "attributeValue", void 0);
+], FilterItemDto.prototype, "value", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], FilterItemDto.prototype, "condition", void 0);
 class PaginationMemoDto {
     constructor() {
         this.pageNumber = 1;

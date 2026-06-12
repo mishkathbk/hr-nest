@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PolicyController = void 0;
 const common_1 = require("@nestjs/common");
+const jwt_auth_guard_1 = require("../common/guards/jwt-auth.guard");
 const user_decorator_1 = require("../common/decorators/user.decorator");
 const response_message_decorator_1 = require("../common/decorators/response-message.decorator");
 const policy_service_1 = require("./policy.service");
@@ -39,13 +40,16 @@ let PolicyController = class PolicyController {
     updateData(id, dto, currentId, companyId) {
         return this.policyService.updateData(id, dto, currentId, companyId);
     }
+    UpdateActiveStatus(id, isactive, currentId) {
+        return this.policyService.UpdateActiveStatus(id, isactive, currentId);
+    }
     deleteData(id, currentId) {
         return this.policyService.deleteData(id, currentId);
     }
 };
 exports.PolicyController = PolicyController;
 __decorate([
-    (0, common_1.Post)('list/pagination'),
+    (0, common_1.Post)('listPagination'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, user_decorator_1.CurrentUser)('companyId')),
@@ -62,14 +66,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PolicyController.prototype, "list", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)('GetById/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], PolicyController.prototype, "getByKey", null);
 __decorate([
-    (0, common_1.Post)(),
+    (0, common_1.Post)('Create'),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     (0, response_message_decorator_1.ResponseMessage)('Created successfully'),
     __param(0, (0, common_1.Body)()),
@@ -80,7 +84,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PolicyController.prototype, "saveData", null);
 __decorate([
-    (0, common_1.Put)(':id'),
+    (0, common_1.Put)('Update/:id'),
     (0, response_message_decorator_1.ResponseMessage)('Updated successfully'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
@@ -91,7 +95,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PolicyController.prototype, "updateData", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
+    (0, common_1.Put)('UpdateActiveStatus/:id/:isactive'),
+    (0, response_message_decorator_1.ResponseMessage)('Status updated successfully'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Param)('isactive', common_1.ParseBoolPipe)),
+    __param(2, (0, user_decorator_1.CurrentUser)('currentId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Boolean, Number]),
+    __metadata("design:returntype", void 0)
+], PolicyController.prototype, "UpdateActiveStatus", null);
+__decorate([
+    (0, common_1.Delete)('Delete/:id'),
     (0, response_message_decorator_1.ResponseMessage)('Deleted successfully'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, user_decorator_1.CurrentUser)('currentId')),
@@ -100,7 +114,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PolicyController.prototype, "deleteData", null);
 exports.PolicyController = PolicyController = __decorate([
-    (0, common_1.Controller)('policy'),
+    (0, common_1.Controller)('hrms/policy'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [policy_service_1.PolicyService])
 ], PolicyController);
 //# sourceMappingURL=policy.controller.js.map

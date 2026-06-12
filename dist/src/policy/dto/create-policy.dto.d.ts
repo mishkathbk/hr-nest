@@ -1,8 +1,8 @@
 export declare class CreatePolicyDto {
-    policyNo: string;
-    policyMessage?: string;
-    regulationMessage?: string;
-    documentGroupId?: number;
-    statusCd?: number;
-    isActive?: boolean;
+    policyno: string;
+    policymessage?: string;
+    regulationmessage?: string;
+    documentgroupid?: number;
+    statuscd?: number;
+    isactive?: boolean;
 }

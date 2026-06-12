@@ -42,18 +42,18 @@ export class MemoService {
       "hrm_memo",
       companyId,
       "memocode",
-      dto.memoCode,
+      dto.memocode,
     );
 
     const record = await this.prisma.hrm_memo.create({
       data: {
-        memocode: dto.memoCode,
-        memotypecd: dto.memoTypeCd ?? null,
-        memosubject: dto.memoSubject ?? null,
-        memotext: dto.memoText ?? null,
-        documentgroupid: dto.documentGroupId ?? null,
-        statuscd: dto.statusCd ?? STATUS_ACTIVE,
-        isactive: dto.isActive ?? true,
+        memocode: dto.memocode,
+        memotypecd: dto.memotypecd ?? null,
+        memosubject: dto.memosubject ?? null,
+        memotext: dto.memotext ?? null,
+        documentgroupid: dto.documentgroupid ?? null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
+        isactive: dto.isactive ?? true,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
@@ -61,8 +61,8 @@ export class MemoService {
       },
     });
 
-    if (dto.employeeIds && dto.employeeIds.length > 0) {
-      const mappings = dto.employeeIds.map((empId) => ({
+    if (dto.employeeids && dto.employeeids.length > 0) {
+      const mappings = dto.employeeids.map((empId) => ({
         memoid: record.memoid,
         employeeid: empId,
       }));
@@ -83,13 +83,13 @@ export class MemoService {
   ) {
     this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
 
-    if (dto.memoCode) {
+    if (dto.memocode) {
       await validateUniqueCode(
         this.prisma,
         "hrm_memo",
         companyId,
         "memocode",
-        dto.memoCode,
+        dto.memocode,
         "memoid",
         id,
       );
@@ -98,13 +98,13 @@ export class MemoService {
     const updated = await this.prisma.hrm_memo.update({
       where: { memoid: id },
       data: {
-        memocode: dto.memoCode ?? undefined,
-        memotypecd: dto.memoTypeCd ?? undefined,
-        memosubject: dto.memoSubject ?? undefined,
-        memotext: dto.memoText ?? undefined,
-        documentgroupid: dto.documentGroupId ?? undefined,
-        statuscd: dto.statusCd ?? undefined,
-        isactive: dto.isActive ?? undefined,
+        memocode: dto.memocode ?? undefined,
+        memotypecd: dto.memotypecd ?? undefined,
+        memosubject: dto.memosubject ?? undefined,
+        memotext: dto.memotext ?? undefined,
+        documentgroupid: dto.documentgroupid ?? undefined,
+        statuscd: dto.statuscd ?? undefined,
+        isactive: dto.isactive ?? undefined,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
@@ -114,10 +114,10 @@ export class MemoService {
     if (!updated)
       throw new NotFoundException("Update failed or record not found");
 
-    if (dto.employeeIds) {
+    if (dto.employeeids) {
       await this.prisma.hrm_memo_employee.deleteMany({ where: { memoid: id } });
-      if (dto.employeeIds.length > 0) {
-        const mappings = dto.employeeIds.map((empId) => ({
+      if (dto.employeeids.length > 0) {
+        const mappings = dto.employeeids.map((empId) => ({
           memoid: id,
           employeeid: empId,
         }));
@@ -126,6 +126,29 @@ export class MemoService {
     }
 
     this.logger.log(`UpdateData completed | id=${id}`);
+    return updated;
+  }
+
+  // ─── UpdateActiveStatus ──────────────────────────────────────────────────────
+
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(
+      `UpdateActiveStatus started | id=${id}, userId=${currentId}`,
+    );
+
+    const updated = await this.prisma.hrm_memo.update({
+      where: { memoid: id },
+      data: {
+        isactive: isactive,
+        modifiedby: currentId,
+        modifieddate: new Date(),
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     return updated;
   }
 
@@ -199,29 +222,42 @@ export class MemoService {
 
     if (search?.trim()) {
       where.OR = [
-        { memocode: { contains: search } },
-        { memosubject: { contains: search } },
-        { memotext: { contains: search } },
+        { memocode: { contains: search, mode: "insensitive" } },
+        { memosubject: { contains: search, mode: "insensitive" } },
+        { memotext: { contains: search, mode: "insensitive" } },
       ];
     }
 
     if (filters?.length > 0) {
       for (const item of filters) {
-        const fieldName = item.attributeName;
-        const rawValue = item.attributeValue;
+        const fieldName = item.field;
+        const rawValue = item.value;
         if (rawValue === "true" || rawValue === "false") {
           where[fieldName] = rawValue === "true";
         } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
-        } else if (!isNaN(Date.parse(rawValue))) {
+        } else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         } else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: "insensitive" };
         }
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    // ── Sorting — guard against invalid/empty column names ──────────────
+    const validSortColumns = new Set([
+      "memoid",
+      "memocode",
+      "memosubject",
+      "memotext",
+      "memotypecd",
+      "statuscd",
+      "isactive",
+      "createddate",
+      "modifieddate",
+    ]);
+    const safeSortBy = validSortColumns.has(sortBy) ? sortBy : "memoid";
+    const orderBy: any = { [safeSortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_memo.findMany({
@@ -235,10 +271,41 @@ export class MemoService {
 
     const recordsWithEmployeeNames = await this.attachEmployeeNames(records);
 
+    const lookupIds = [
+      ...new Set(
+        records
+          .flatMap((r) => [r.memotypecd])
+          .filter((id): id is number => id != null),
+      ),
+    ];
+
+    const lookupMap = new Map<
+      number,
+      {
+        lookupid: number;
+        lookupname: string | null;
+        lookupnamear: string | null;
+      }
+    >();
+
+    if (lookupIds.length > 0) {
+      const lookups = await this.prisma.gen_lookup.findMany({
+        where: { lookupid: { in: lookupIds } },
+        select: { lookupid: true, lookupname: true, lookupnamear: true },
+      });
+      lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+    }
+
+    const enrichedRecords = recordsWithEmployeeNames.map((r) => ({
+      ...r,
+      memotypecdDTO:
+        r.memotypecd != null ? (lookupMap.get(r.memotypecd) ?? null) : null,
+    }));
+
     this.logger.log(
       `ListPagination completed | count=${records.length}, totalCount=${totalCount}`,
     );
-    return new PaginatedResult(recordsWithEmployeeNames, totalCount);
+    return new PaginatedResult(enrichedRecords, totalCount);
   }
 
   // ─── Attach Employee Names Helper ────────────────────────────────────────────
@@ -262,7 +329,7 @@ export class MemoService {
       where: { employeeid: { in: employeeIds } },
       select: { employeeid: true, employeename: true },
     });
-    // console.log("employees::", employees);
+
     const employeeMap = new Map(
       employees.map((e) => [e.employeeid, e.employeename]),
     );
@@ -275,7 +342,7 @@ export class MemoService {
       }));
       return {
         ...r,
-        employees: employeesData,
+        employeeDTOList: employeesData,
       };
     });
   }

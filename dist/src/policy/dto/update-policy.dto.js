@@ -19,32 +19,32 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdatePolicyDto.prototype, "policyNo", void 0);
+], UpdatePolicyDto.prototype, "policyno", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdatePolicyDto.prototype, "policyMessage", void 0);
+], UpdatePolicyDto.prototype, "policymessage", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdatePolicyDto.prototype, "regulationMessage", void 0);
+], UpdatePolicyDto.prototype, "regulationmessage", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdatePolicyDto.prototype, "documentGroupId", void 0);
+], UpdatePolicyDto.prototype, "documentgroupid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdatePolicyDto.prototype, "statusCd", void 0);
+], UpdatePolicyDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], UpdatePolicyDto.prototype, "isActive", void 0);
+], UpdatePolicyDto.prototype, "isactive", void 0);
 //# sourceMappingURL=update-policy.dto.js.map

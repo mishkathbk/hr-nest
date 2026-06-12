@@ -1,6 +1,7 @@
 export declare class FilterItemDto {
-    attributeName: string;
-    attributeValue: string;
+    field: string;
+    value: string;
+    condition?: number;
 }
 export declare class PaginationMemoDto {
     pageNumber?: number;

@@ -18,44 +18,44 @@ exports.CreateMemoDto = CreateMemoDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateMemoDto.prototype, "memoCode", void 0);
+], CreateMemoDto.prototype, "memocode", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsInt)({ each: true }),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Array)
-], CreateMemoDto.prototype, "employeeIds", void 0);
+], CreateMemoDto.prototype, "employeeids", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateMemoDto.prototype, "memoTypeCd", void 0);
+], CreateMemoDto.prototype, "memotypecd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateMemoDto.prototype, "memoSubject", void 0);
+], CreateMemoDto.prototype, "memosubject", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateMemoDto.prototype, "memoText", void 0);
+], CreateMemoDto.prototype, "memotext", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateMemoDto.prototype, "documentGroupId", void 0);
+], CreateMemoDto.prototype, "documentgroupid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], CreateMemoDto.prototype, "statusCd", void 0);
+], CreateMemoDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], CreateMemoDto.prototype, "isActive", void 0);
+], CreateMemoDto.prototype, "isactive", void 0);
 //# sourceMappingURL=create-memo.dto.js.map

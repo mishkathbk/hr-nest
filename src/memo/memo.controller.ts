@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   ParseIntPipe,
+  ParseBoolPipe,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -21,16 +22,15 @@ import { CreateMemoDto } from './dto/create-memo.dto';
 import { UpdateMemoDto } from './dto/update-memo.dto';
 import { PaginationMemoDto } from './dto/pagination-memo.dto';
 
-@Controller('memo')
-// @UseGuards(JwtAuthGuard)
+@Controller('hrms/memo')
+@UseGuards(JwtAuthGuard)
 export class MemoController {
   constructor(private readonly memoService: MemoService) {}
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // POST /api/memo/list/pagination
-  // Body: { search?, filterList?, offset?, limit? }
-  @Post('list/pagination')
+  // POST /api/hrms/memo/listPagination
+  @Post('listPagination')
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationMemoDto,
@@ -41,26 +41,23 @@ export class MemoController {
 
   // ── CRUD ─────────────────────────────────────────────────────────────────
 
-  // GET /api/memo
+  // GET /api/hrms/memo  (also handles ?inactive=true)
   @Get()
   list(
     @Query('inactive') inactive: string,
     @CurrentUser('companyId') companyId: number,
   ) {
-    return this.memoService.list(
-      companyId,
-      inactive === 'true',
-    );
+    return this.memoService.list(companyId, inactive === 'true');
   }
 
-  // GET /api/memo/:id
-  @Get(':id')
+  // GET /api/hrms/memo/GetById/:id
+  @Get('GetById/:id')
   getByKey(@Param('id', ParseIntPipe) id: number) {
     return this.memoService.getByKey(id);
   }
 
-  // POST /api/memo
-  @Post()
+  // POST /api/hrms/memo/Create
+  @Post('Create')
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage('Created successfully')
   saveData(
@@ -71,8 +68,8 @@ export class MemoController {
     return this.memoService.saveData(dto, currentId, companyId);
   }
 
-  // PUT /api/memo/:id
-  @Put(':id')
+  // PUT /api/hrms/memo/Update/:id
+  @Put('Update/:id')
   @ResponseMessage('Updated successfully')
   updateData(
     @Param('id', ParseIntPipe) id: number,
@@ -80,16 +77,22 @@ export class MemoController {
     @CurrentUser('currentId') currentId: number,
     @CurrentUser('companyId') companyId: number,
   ) {
-    return this.memoService.updateData(
-      id,
-      dto,
-      currentId,
-      companyId,
-    );
+    return this.memoService.updateData(id, dto, currentId, companyId);
   }
 
-  // DELETE /api/memo/:id
-  @Delete(':id')
+  // PUT /api/hrms/memo/UpdateActiveStatus/:id/:isactive
+  @Put('UpdateActiveStatus/:id/:isactive')
+  @ResponseMessage('Status updated successfully')
+  UpdateActiveStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('isactive', ParseBoolPipe) isactive: boolean,
+    @CurrentUser('currentId') currentId: number,
+  ) {
+    return this.memoService.UpdateActiveStatus(id, isactive, currentId);
+  }
+
+  // DELETE /api/hrms/memo/Delete/:id
+  @Delete('Delete/:id')
   @ResponseMessage('Deleted successfully')
   deleteData(
     @Param('id', ParseIntPipe) id: number,

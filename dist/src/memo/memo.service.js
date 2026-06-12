@@ -34,24 +34,24 @@ let MemoService = MemoService_1 = class MemoService {
     }
     async saveData(dto, currentId, companyId) {
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
-        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_memo", companyId, "memocode", dto.memoCode);
+        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_memo", companyId, "memocode", dto.memocode);
         const record = await this.prisma.hrm_memo.create({
             data: {
-                memocode: dto.memoCode,
-                memotypecd: dto.memoTypeCd ?? null,
-                memosubject: dto.memoSubject ?? null,
-                memotext: dto.memoText ?? null,
-                documentgroupid: dto.documentGroupId ?? null,
-                statuscd: dto.statusCd ?? status_constants_1.STATUS_ACTIVE,
-                isactive: dto.isActive ?? true,
+                memocode: dto.memocode,
+                memotypecd: dto.memotypecd ?? null,
+                memosubject: dto.memosubject ?? null,
+                memotext: dto.memotext ?? null,
+                documentgroupid: dto.documentgroupid ?? null,
+                statuscd: dto.statuscd ?? status_constants_1.STATUS_ACTIVE,
+                isactive: dto.isactive ?? true,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
                 isdeleted: false,
             },
         });
-        if (dto.employeeIds && dto.employeeIds.length > 0) {
-            const mappings = dto.employeeIds.map((empId) => ({
+        if (dto.employeeids && dto.employeeids.length > 0) {
+            const mappings = dto.employeeids.map((empId) => ({
                 memoid: record.memoid,
                 employeeid: empId,
             }));
@@ -62,19 +62,19 @@ let MemoService = MemoService_1 = class MemoService {
     }
     async updateData(id, dto, currentId, companyId) {
         this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
-        if (dto.memoCode) {
-            await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_memo", companyId, "memocode", dto.memoCode, "memoid", id);
+        if (dto.memocode) {
+            await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, "hrm_memo", companyId, "memocode", dto.memocode, "memoid", id);
         }
         const updated = await this.prisma.hrm_memo.update({
             where: { memoid: id },
             data: {
-                memocode: dto.memoCode ?? undefined,
-                memotypecd: dto.memoTypeCd ?? undefined,
-                memosubject: dto.memoSubject ?? undefined,
-                memotext: dto.memoText ?? undefined,
-                documentgroupid: dto.documentGroupId ?? undefined,
-                statuscd: dto.statusCd ?? undefined,
-                isactive: dto.isActive ?? undefined,
+                memocode: dto.memocode ?? undefined,
+                memotypecd: dto.memotypecd ?? undefined,
+                memosubject: dto.memosubject ?? undefined,
+                memotext: dto.memotext ?? undefined,
+                documentgroupid: dto.documentgroupid ?? undefined,
+                statuscd: dto.statuscd ?? undefined,
+                isactive: dto.isactive ?? undefined,
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
@@ -82,10 +82,10 @@ let MemoService = MemoService_1 = class MemoService {
         });
         if (!updated)
             throw new common_1.NotFoundException("Update failed or record not found");
-        if (dto.employeeIds) {
+        if (dto.employeeids) {
             await this.prisma.hrm_memo_employee.deleteMany({ where: { memoid: id } });
-            if (dto.employeeIds.length > 0) {
-                const mappings = dto.employeeIds.map((empId) => ({
+            if (dto.employeeids.length > 0) {
+                const mappings = dto.employeeids.map((empId) => ({
                     memoid: id,
                     employeeid: empId,
                 }));
@@ -93,6 +93,21 @@ let MemoService = MemoService_1 = class MemoService {
             }
         }
         this.logger.log(`UpdateData completed | id=${id}`);
+        return updated;
+    }
+    async UpdateActiveStatus(id, isactive, currentId) {
+        this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+        const updated = await this.prisma.hrm_memo.update({
+            where: { memoid: id },
+            data: {
+                isactive: isactive,
+                modifiedby: currentId,
+                modifieddate: new Date(),
+            },
+        });
+        if (!updated)
+            throw new common_1.NotFoundException("Update failed or record not found");
+        this.logger.log(`UpdateActiveStatus completed | id=${id}`);
         return updated;
     }
     async deleteData(id, currentId) {
@@ -133,30 +148,42 @@ let MemoService = MemoService_1 = class MemoService {
         const where = { isdeleted: false, companyid: companyId };
         if (search?.trim()) {
             where.OR = [
-                { memocode: { contains: search } },
-                { memosubject: { contains: search } },
-                { memotext: { contains: search } },
+                { memocode: { contains: search, mode: "insensitive" } },
+                { memosubject: { contains: search, mode: "insensitive" } },
+                { memotext: { contains: search, mode: "insensitive" } },
             ];
         }
         if (filters?.length > 0) {
             for (const item of filters) {
-                const fieldName = item.attributeName;
-                const rawValue = item.attributeValue;
+                const fieldName = item.field;
+                const rawValue = item.value;
                 if (rawValue === "true" || rawValue === "false") {
                     where[fieldName] = rawValue === "true";
                 }
                 else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
                     where[fieldName] = Number(rawValue);
                 }
-                else if (!isNaN(Date.parse(rawValue))) {
+                else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
                     where[fieldName] = new Date(rawValue);
                 }
                 else {
-                    where[fieldName] = { contains: rawValue };
+                    where[fieldName] = { contains: rawValue, mode: "insensitive" };
                 }
             }
         }
-        const orderBy = { [sortBy]: isDescending ? "desc" : "asc" };
+        const validSortColumns = new Set([
+            "memoid",
+            "memocode",
+            "memosubject",
+            "memotext",
+            "memotypecd",
+            "statuscd",
+            "isactive",
+            "createddate",
+            "modifieddate",
+        ]);
+        const safeSortBy = validSortColumns.has(sortBy) ? sortBy : "memoid";
+        const orderBy = { [safeSortBy]: isDescending ? "desc" : "asc" };
         const [records, totalCount] = await this.prisma.$transaction([
             this.prisma.hrm_memo.findMany({
                 where,
@@ -167,8 +194,25 @@ let MemoService = MemoService_1 = class MemoService {
             this.prisma.hrm_memo.count({ where }),
         ]);
         const recordsWithEmployeeNames = await this.attachEmployeeNames(records);
+        const lookupIds = [
+            ...new Set(records
+                .flatMap((r) => [r.memotypecd])
+                .filter((id) => id != null)),
+        ];
+        const lookupMap = new Map();
+        if (lookupIds.length > 0) {
+            const lookups = await this.prisma.gen_lookup.findMany({
+                where: { lookupid: { in: lookupIds } },
+                select: { lookupid: true, lookupname: true, lookupnamear: true },
+            });
+            lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+        }
+        const enrichedRecords = recordsWithEmployeeNames.map((r) => ({
+            ...r,
+            memotypecdDTO: r.memotypecd != null ? (lookupMap.get(r.memotypecd) ?? null) : null,
+        }));
         this.logger.log(`ListPagination completed | count=${records.length}, totalCount=${totalCount}`);
-        return new response_interceptor_1.PaginatedResult(recordsWithEmployeeNames, totalCount);
+        return new response_interceptor_1.PaginatedResult(enrichedRecords, totalCount);
     }
     async attachEmployeeNames(records) {
         if (!records || records.length === 0)
@@ -194,7 +238,7 @@ let MemoService = MemoService_1 = class MemoService {
             }));
             return {
                 ...r,
-                employees: employeesData,
+                employeeDTOList: employeesData,
             };
         });
     }

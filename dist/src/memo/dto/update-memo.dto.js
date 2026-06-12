@@ -19,45 +19,45 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateMemoDto.prototype, "memoCode", void 0);
+], UpdateMemoDto.prototype, "memocode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsInt)({ each: true }),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Array)
-], UpdateMemoDto.prototype, "employeeIds", void 0);
+], UpdateMemoDto.prototype, "employeeids", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateMemoDto.prototype, "memoTypeCd", void 0);
+], UpdateMemoDto.prototype, "memotypecd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateMemoDto.prototype, "memoSubject", void 0);
+], UpdateMemoDto.prototype, "memosubject", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], UpdateMemoDto.prototype, "memoText", void 0);
+], UpdateMemoDto.prototype, "memotext", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateMemoDto.prototype, "documentGroupId", void 0);
+], UpdateMemoDto.prototype, "documentgroupid", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
-], UpdateMemoDto.prototype, "statusCd", void 0);
+], UpdateMemoDto.prototype, "statuscd", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], UpdateMemoDto.prototype, "isActive", void 0);
+], UpdateMemoDto.prototype, "isactive", void 0);
 //# sourceMappingURL=update-memo.dto.js.map

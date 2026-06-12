@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   ParseIntPipe,
+  ParseBoolPipe,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -21,16 +22,15 @@ import { CreatePolicyDto } from './dto/create-policy.dto';
 import { UpdatePolicyDto } from './dto/update-policy.dto';
 import { PaginationPolicyDto } from './dto/pagination-policy.dto';
 
-@Controller('policy')
-// @UseGuards(JwtAuthGuard)
+@Controller('hrms/policy')
+@UseGuards(JwtAuthGuard)
 export class PolicyController {
   constructor(private readonly policyService: PolicyService) {}
 
   // ── Specific list routes MUST be declared before /:id ───────────────────
 
-  // POST /api/policy/list/pagination
-  // Body: { search?, filterList?, offset?, limit? }
-  @Post('list/pagination')
+  // POST /api/hrms/policy/listPagination
+  @Post('listPagination')
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationPolicyDto,
@@ -40,8 +40,8 @@ export class PolicyController {
   }
 
   // ── CRUD ─────────────────────────────────────────────────────────────────
- 
-  // GET /api/policy
+
+  // GET /api/hrms/policy
   @Get()
   list(
     @Query('inactive') inactive: string,
@@ -50,14 +50,14 @@ export class PolicyController {
     return this.policyService.list(companyId, inactive === 'true');
   }
 
-  // GET /api/policy/:id
-  @Get(':id')
+  // GET /api/hrms/policy/GetById/:id
+  @Get('GetById/:id')
   getByKey(@Param('id', ParseIntPipe) id: number) {
     return this.policyService.getByKey(id);
   }
 
-  // POST /api/policy
-  @Post()
+  // POST /api/hrms/policy/Create
+  @Post('Create')
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage('Created successfully')
   saveData(
@@ -68,8 +68,8 @@ export class PolicyController {
     return this.policyService.saveData(dto, currentId, companyId);
   }
 
-  // PUT /api/policy/:id
-  @Put(':id')
+  // PUT /api/hrms/policy/Update/:id
+  @Put('Update/:id')
   @ResponseMessage('Updated successfully')
   updateData(
     @Param('id', ParseIntPipe) id: number,
@@ -80,8 +80,19 @@ export class PolicyController {
     return this.policyService.updateData(id, dto, currentId, companyId);
   }
 
-  // DELETE /api/policy/:id
-  @Delete(':id')
+  // PUT /api/hrms/policy/UpdateActiveStatus/:id/:isactive
+  @Put('UpdateActiveStatus/:id/:isactive')
+  @ResponseMessage('Status updated successfully')
+  UpdateActiveStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('isactive', ParseBoolPipe) isactive: boolean,
+    @CurrentUser('currentId') currentId: number,
+  ) {
+    return this.policyService.UpdateActiveStatus(id, isactive, currentId);
+  }
+
+  // DELETE /api/hrms/policy/Delete/:id
+  @Delete('Delete/:id')
   @ResponseMessage('Deleted successfully')
   deleteData(
     @Param('id', ParseIntPipe) id: number,

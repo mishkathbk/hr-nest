@@ -4,38 +4,38 @@ import { Type } from 'class-transformer';
 export class UpdateMemoDto {
   @IsOptional()
   @IsString()
-  memoCode?: string;
+  memocode?: string;
 
   @IsOptional()
   @IsArray()
   @IsInt({ each: true })
   @Type(() => Number)
-  employeeIds?: number[];
+  employeeids?: number[];
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  memoTypeCd?: number;
+  memotypecd?: number;
 
   @IsOptional()
   @IsString()
-  memoSubject?: string;
+  memosubject?: string;
 
   @IsOptional()
   @IsString()
-  memoText?: string;
+  memotext?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  documentGroupId?: number;
+  documentgroupid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

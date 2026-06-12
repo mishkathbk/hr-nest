@@ -3,27 +3,27 @@ import { Type } from 'class-transformer';
 
 export class CreatePolicyDto {
   @IsString()
-  policyNo: string;
+  policyno: string;
 
   @IsOptional()
   @IsString()
-  policyMessage?: string;
+  policymessage?: string;
 
   @IsOptional()
   @IsString()
-  regulationMessage?: string;
+  regulationmessage?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  documentGroupId?: number;
+  documentgroupid?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

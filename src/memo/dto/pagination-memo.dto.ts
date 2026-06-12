@@ -11,10 +11,14 @@ import { Type } from 'class-transformer';
 
 export class FilterItemDto {
   @IsString()
-  attributeName: string;
+  field: string;
 
   @IsString()
-  attributeValue: string;
+  value: string;
+
+  @IsOptional()
+  @IsInt()
+  condition?: number; // 1 = contains, 2 = equals, etc. (reserved for future use)
 }
 
 export class PaginationMemoDto {

@@ -33,15 +33,15 @@ let PolicyService = PolicyService_1 = class PolicyService {
     }
     async saveData(dto, currentId, companyId) {
         this.logger.log(`SaveData started | userId=${currentId}, companyId=${companyId}`);
-        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, 'hrm_policy', companyId, 'policyno', dto.policyNo);
+        await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, 'hrm_policy', companyId, 'policyno', dto.policyno);
         const record = await this.prisma.hrm_policy.create({
             data: {
-                policyno: dto.policyNo,
-                policymessage: dto.policyMessage ?? null,
-                regulationmessage: dto.regulationMessage ?? null,
-                documentgroupid: dto.documentGroupId ?? null,
-                statuscd: dto.statusCd ?? status_constants_1.STATUS_ACTIVE,
-                isactive: dto.isActive ?? true,
+                policyno: dto.policyno,
+                policymessage: dto.policymessage ?? null,
+                regulationmessage: dto.regulationmessage ?? null,
+                documentgroupid: dto.documentgroupid ?? null,
+                statuscd: dto.statuscd ?? status_constants_1.STATUS_ACTIVE,
+                isactive: dto.isactive ?? true,
                 companyid: companyId,
                 createdby: currentId,
                 createddate: new Date(),
@@ -53,18 +53,18 @@ let PolicyService = PolicyService_1 = class PolicyService {
     }
     async updateData(id, dto, currentId, companyId) {
         this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
-        if (dto.policyNo) {
-            await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, 'hrm_policy', companyId, 'policyno', dto.policyNo, 'policyid', id);
+        if (dto.policyno) {
+            await (0, unique_code_validator_1.validateUniqueCode)(this.prisma, 'hrm_policy', companyId, 'policyno', dto.policyno, 'policyid', id);
         }
         const updated = await this.prisma.hrm_policy.update({
             where: { policyid: id },
             data: {
-                policyno: dto.policyNo,
-                policymessage: dto.policyMessage ?? null,
-                regulationmessage: dto.regulationMessage ?? null,
-                documentgroupid: dto.documentGroupId ?? null,
-                statuscd: dto.statusCd ?? undefined,
-                isactive: dto.isActive ?? undefined,
+                policyno: dto.policyno ?? undefined,
+                policymessage: dto.policymessage ?? undefined,
+                regulationmessage: dto.regulationmessage ?? undefined,
+                documentgroupid: dto.documentgroupid ?? undefined,
+                statuscd: dto.statuscd ?? undefined,
+                isactive: dto.isactive ?? undefined,
                 companyid: companyId,
                 modifiedby: currentId,
                 modifieddate: new Date(),
@@ -73,6 +73,21 @@ let PolicyService = PolicyService_1 = class PolicyService {
         if (!updated)
             throw new common_1.NotFoundException('Update failed or record not found');
         this.logger.log(`UpdateData completed | id=${id}`);
+        return updated;
+    }
+    async UpdateActiveStatus(id, isactive, currentId) {
+        this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+        const updated = await this.prisma.hrm_policy.update({
+            where: { policyid: id },
+            data: {
+                isactive: isactive,
+                modifiedby: currentId,
+                modifieddate: new Date(),
+            },
+        });
+        if (!updated)
+            throw new common_1.NotFoundException('Update failed or record not found');
+        this.logger.log(`UpdateActiveStatus completed | id=${id}`);
         return updated;
     }
     async deleteData(id, currentId) {
@@ -113,29 +128,41 @@ let PolicyService = PolicyService_1 = class PolicyService {
         const where = { isdeleted: false, companyid: companyId };
         if (search?.trim()) {
             where.OR = [
-                { policyno: { contains: search } },
-                { policymessage: { contains: search } },
+                { policyno: { contains: search, mode: 'insensitive' } },
+                { policymessage: { contains: search, mode: 'insensitive' } },
+                { regulationmessage: { contains: search, mode: 'insensitive' } },
             ];
         }
         if (filters?.length > 0) {
             for (const item of filters) {
-                const fieldName = item.attributeName;
-                const rawValue = item.attributeValue;
+                const fieldName = item.field;
+                const rawValue = item.value;
                 if (rawValue === 'true' || rawValue === 'false') {
                     where[fieldName] = rawValue === 'true';
                 }
                 else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
                     where[fieldName] = Number(rawValue);
                 }
-                else if (!isNaN(Date.parse(rawValue))) {
+                else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
                     where[fieldName] = new Date(rawValue);
                 }
                 else {
-                    where[fieldName] = { contains: rawValue };
+                    where[fieldName] = { contains: rawValue, mode: 'insensitive' };
                 }
             }
         }
-        const orderBy = { [sortBy]: isDescending ? 'desc' : 'asc' };
+        const validSortColumns = new Set([
+            'policyid',
+            'policyno',
+            'policymessage',
+            'regulationmessage',
+            'statuscd',
+            'isactive',
+            'createddate',
+            'modifieddate',
+        ]);
+        const safeSortBy = validSortColumns.has(sortBy) ? sortBy : 'policyid';
+        const orderBy = { [safeSortBy]: isDescending ? 'desc' : 'asc' };
         const [records, totalCount] = await this.prisma.$transaction([
             this.prisma.hrm_policy.findMany({
                 where,
