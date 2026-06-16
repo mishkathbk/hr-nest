@@ -14,6 +14,7 @@ import { PayrollGenerationModule } from './payroll-generation/payroll-generation
 import { SalaryAdjustmentModule } from './salary-adjustment/salary-adjustment.module';
 import { PayslipModule } from './payslip/payslip.module';
 import { EmployeePayslipModule } from './employee-payslip/employee-payslip.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -35,7 +36,9 @@ import { EmployeePayslipModule } from './employee-payslip/employee-payslip.modul
     PayrollGenerationModule,
     SalaryAdjustmentModule,
     PayslipModule,
-    EmployeePayslipModule
+    EmployeePayslipModule,
+    HealthModule
   ],
+  controllers: [],
 })
 export class AppModule {}

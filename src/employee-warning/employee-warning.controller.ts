@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../common/decorators/user.decorator';
@@ -21,7 +22,7 @@ import { CreateEmployeeWarningDto } from './dto/create-employee-warning.dto';
 import { UpdateEmployeeWarningDto } from './dto/update-employee-warning.dto';
 import { PaginationEmployeeWarningDto } from './dto/pagination-employee-warning.dto';
 
-@Controller('employee-warning')
+@Controller('hrms/employee-warning')
 // @UseGuards(JwtAuthGuard)
 export class EmployeeWarningController {
   constructor(
@@ -32,7 +33,7 @@ export class EmployeeWarningController {
 
   // POST /api/employee-warning/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
-  @Post('list/pagination')
+  @Post('ListPagination')
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationEmployeeWarningDto,
@@ -44,7 +45,7 @@ export class EmployeeWarningController {
   // ── CRUD ─────────────────────────────────────────────────────────────────
 
   // GET /api/employee-warning
-  @Get()
+  @Get('GetList')
   list(
     @Query('inactive') inactive: string,
     @CurrentUser('companyId') companyId: number,
@@ -56,13 +57,13 @@ export class EmployeeWarningController {
   }
 
   // GET /api/employee-warning/:id
-  @Get(':id')
+  @Get('GetById/:id')
   getByKey(@Param('id', ParseIntPipe) id: number) {
     return this.employeeWarningService.getByKey(id);
   }
 
   // POST /api/employee-warning
-  @Post()
+  @Post('Create')
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage('Created successfully')
   saveData(
@@ -73,8 +74,18 @@ export class EmployeeWarningController {
     return this.employeeWarningService.saveData(dto, currentId, companyId);
   }
 
+  @Put('UpdateActiveStatus/:id/:isactive')
+  @ResponseMessage('Status updated successfully')
+  UpdateActiveStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('isactive', ParseBoolPipe) isactive: boolean,
+    @CurrentUser('currentId') currentId: number,
+  ) {
+    return this.employeeWarningService.UpdateActiveStatus(id, isactive, currentId);
+  }
+
   // PUT /api/employee-warning/:id
-  @Put(':id')
+  @Put('Update/:id')
   @ResponseMessage('Updated successfully')
   updateData(
     @Param('id', ParseIntPipe) id: number,
@@ -91,7 +102,7 @@ export class EmployeeWarningController {
   }
 
   // DELETE /api/employee-warning/:id
-  @Delete(':id')
+  @Delete('Delete/:id')
   @ResponseMessage('Deleted successfully')
   deleteData(
     @Param('id', ParseIntPipe) id: number,

@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { LeaveCalendarService } from './leave-calendar.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -20,7 +21,7 @@ import { CreateLeaveCalendarDto } from './dto/create-leave-calendar.dto';
 import { UpdateLeaveCalendarDto } from './dto/update-leave-calendar.dto';
 import { PaginationLeaveCalendarDto } from './dto/pagination-leave-calendar.dto';
 
-@Controller('leave-calendar')
+@Controller('hrms/leave-calendar')
 // @UseGuards(JwtAuthGuard)
 export class LeaveCalendarController {
   constructor(private readonly leaveCalendarService: LeaveCalendarService) {}
@@ -30,7 +31,7 @@ export class LeaveCalendarController {
 
   // POST /api/leave-calendar/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
-  @Post('list/pagination')
+  @Post('ListPagination')
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationLeaveCalendarDto,
@@ -42,7 +43,7 @@ export class LeaveCalendarController {
   // ── CRUD ─────────────────────────────────────────────────────────────────
 
   // GET /api/leave-calendar
-  @Get()
+  @Get("GetList")
   list(
     @Query('inactive') inactive: string,
     @CurrentUser('companyId') companyId: number,
@@ -51,13 +52,13 @@ export class LeaveCalendarController {
   }
 
   // GET /api/leave-calendar/:id
-  @Get(':id')
+  @Get('GetById/:id')
   getByKey(@Param('id', ParseIntPipe) id: number) {
     return this.leaveCalendarService.getByKey(id);
   }
 
   // POST /api/leave-calendar
-  @Post()
+  @Post("Create")
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage('Created successfully')
   saveData(
@@ -68,8 +69,18 @@ export class LeaveCalendarController {
     return this.leaveCalendarService.saveData(dto, currentId, companyId);
   }
 
+  @Put('UpdateActiveStatus/:id/:isactive')
+  @ResponseMessage('Status updated successfully')
+  UpdateActiveStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('isactive', ParseBoolPipe) isactive: boolean,
+    @CurrentUser('currentId') currentId: number,
+  ) {
+    return this.leaveCalendarService.UpdateActiveStatus(id, isactive, currentId);
+  }
+
   // PUT /api/leave-calendar/:id
-  @Put(':id')
+  @Put('Update/:id')
   @ResponseMessage('Updated successfully')
   updateData(
     @Param('id', ParseIntPipe) id: number,
@@ -81,7 +92,7 @@ export class LeaveCalendarController {
   }
 
   // DELETE /api/leave-calendar/:id
-  @Delete(':id')
+  @Delete('Delete/:id')
   @ResponseMessage('Deleted successfully')
   deleteData(
     @Param('id', ParseIntPipe) id: number,

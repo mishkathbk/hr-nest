@@ -50,7 +50,7 @@ export class SalaryAdjustmentService {
         createdby: currentId,
         createddate: new Date(),
         isdeleted: false,
-        isactive: true,
+        isactive: (dto as any).isactive ?? true,
       },
     });
 
@@ -82,6 +82,7 @@ export class SalaryAdjustmentService {
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
+        isactive: (dto as any).isactive,
       },
     });
 
@@ -89,6 +90,26 @@ export class SalaryAdjustmentService {
       throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
+    return updated;
+  }
+
+  // ── PUT /api/salary-adjustment/UpdateActiveStatus/:id/:isactive ────────
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+
+    const updated = await this.prisma.hrm_salaryadjustment.update({
+      where: { salaryadjustmentid: id },
+      data: {
+        modifiedby: currentId,
+        modifieddate: new Date(),
+        isactive: isactive,
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     return updated;
   }
 
@@ -154,7 +175,7 @@ export class SalaryAdjustmentService {
     const where: any = { isdeleted: false, companyid: companyId };
 
     if (search?.trim()) {
-      where.OR = [{ remarks: { contains: search } }];
+      where.OR = [{ remarks: { contains: search, mode: 'insensitive' } }];
     }
 
     if (filters?.length > 0) {
@@ -165,15 +186,33 @@ export class SalaryAdjustmentService {
           where[fieldName] = rawValue === "true";
         } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
-        } else if (!isNaN(Date.parse(rawValue))) {
+        } else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         } else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: 'insensitive' };
         }
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    const validSortColumns = new Set([
+      "salaryadjustmentid",
+      "employeeid",
+      "salarytypeid",
+      "payrollyear",
+      "payrollmonth",
+      "amount",
+      "remarks",
+      "statuscd",
+      "companyid",
+      "createdby",
+      "createddate",
+      "modifiedby",
+      "modifieddate",
+      "isdeleted",
+      "isactive",
+    ]);
+    const safeSortBy = validSortColumns.has(sortBy) ? sortBy : "salaryadjustmentid";
+    const orderBy: any = { [safeSortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_salaryadjustment.findMany({

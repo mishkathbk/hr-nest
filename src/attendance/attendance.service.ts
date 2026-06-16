@@ -29,8 +29,9 @@ export class AttendanceService {
       `GetByDate started | employeeId=${dto.employeeId}, date=${dto.date}`,
     );
 
-    const startOfDay = new Date(`${dto.date}T00:00:00.000`);
-    const endOfDay = new Date(`${dto.date}T23:59:59.999`);
+    const [gyear, gmonth, gday] = dto.date.split("-").map(Number);
+    const startOfDay = new Date(Date.UTC(gyear, gmonth - 1, gday, 0, 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(gyear, gmonth - 1, gday, 23, 59, 59, 999));
 
     // Fetch employee + department info
     const employee = await this.prisma.hrm_employee.findUnique({
@@ -121,8 +122,9 @@ export class AttendanceService {
 
     // DTO date might be '2026-06-02T00:00:00', we take the YYYY-MM-DD part
     const dateOnly = dto.attendanceDate.split("T")[0];
-    const startOfDay = new Date(`${dateOnly}T00:00:00.000`);
-    const endOfDay = new Date(`${dateOnly}T23:59:59.999`);
+    const [syear, smonth, sday] = dateOnly.split("-").map(Number);
+    const startOfDay = new Date(Date.UTC(syear, smonth - 1, sday, 0, 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(syear, smonth - 1, sday, 23, 59, 59, 999));
 
     const detList = dto.attendanceDetDTOList || [];
 

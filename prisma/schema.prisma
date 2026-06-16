@@ -961,7 +961,7 @@ model ast_assetpurchase {
   assetpurchaseid                                               Int                           @id @default(autoincrement())
   transactionnumber                                             String?                       @db.VarChar(15)
   transactiondate                                               DateTime?                     @db.Timestamp(6)
-  supplierid                                                    Int
+  supplierid                                                    Int?
   suppliername                                                  String?                       @db.VarChar(200)
   mobileno                                                      String?                       @db.VarChar(200)
   email                                                         String?                       @db.VarChar(200)
@@ -1012,7 +1012,7 @@ model ast_assetpurchase {
   inv_itemmaster                                                inv_itemmaster?               @relation(fields: [itemid], references: [itemid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_item")
   inv_itemsublocation                                           inv_itemsublocation?          @relation(fields: [itemsublocationid], references: [itemsublocationid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_itemsublocation")
   ast_property                                                  ast_property?                 @relation(fields: [propertyid], references: [propertyid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_property")
-  pur_supplier                                                  pur_supplier                  @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_supplier")
+  pur_supplier                                                  pur_supplier?                 @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_supplier")
   wfl_masterstate                                               wfl_masterstate?              @relation(fields: [workflowmasterstateid], references: [workflowmasterstateid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_wfl_masterstate")
   ast_assettransfer                                             ast_assettransfer[]
 }

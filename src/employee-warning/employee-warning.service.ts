@@ -91,6 +91,26 @@ export class EmployeeWarningService {
     return updated;
   }
 
+  // ─── UpdateActiveStatus ────────────────────────────────────────────────────────
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+
+    const updated = await this.prisma.hrm_employeewarning.update({
+      where: { employeewarningid: id },
+      data: {
+        modifiedby: currentId,
+        modifieddate: new Date(),
+        isactive: isactive,
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
+    return updated;
+  }
+
   // ─── DeleteData ──────────────────────────────────────────────────────────────
 
   async deleteData(id: number, currentId: number) {
@@ -161,8 +181,8 @@ export class EmployeeWarningService {
 
     if (search?.trim()) {
       where.OR = [
-        { subject: { contains: search } },
-        { warningmessage: { contains: search } },
+        { subject: { contains: search, mode: 'insensitive' } },
+        { warningmessage: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -174,15 +194,29 @@ export class EmployeeWarningService {
           where[fieldName] = rawValue === "true";
         } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
-        } else if (!isNaN(Date.parse(rawValue))) {
+        } else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         } else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: 'insensitive' };
         }
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
+    const validSortColumns = new Set([
+      "employeewarningid",
+      "employeeid",
+      "subject",
+      "warningmessage",
+      "statuscd",
+      "isactive",
+      "companyid",
+      "createdby",
+      "createddate",
+      "modifiedby",
+      "modifieddate",
+    ]);
+    const safeSortBy = validSortColumns.has(sortBy) ? sortBy : "employeewarningid";
+    const orderBy: any = { [safeSortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_employeewarning.findMany({
@@ -225,4 +259,6 @@ export class EmployeeWarningService {
       employeename: employeeMap.get(r.employeeid) || null,
     }));
   }
+
+  
 }

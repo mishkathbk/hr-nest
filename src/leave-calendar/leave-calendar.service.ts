@@ -51,6 +51,7 @@ export class LeaveCalendarService {
     //     createdby:   currentId,
     //     createddate: new Date(),
     //     isdeleted:   false,
+    //     isactive:    dto.isactive ?? true,
     //   },
     // });
 
@@ -81,12 +82,32 @@ export class LeaveCalendarService {
     //     companyid:   companyId,
     //     modifiedby:  currentId,
     //     modifieddate: new Date(),
+    //     isactive:    dto.isactive ?? true,
     //   },
     // });
 
     // if (!updated) throw new NotFoundException('Update failed or record not found');
 
     // this.logger.log(`UpdateData completed | id=${id}`);
+    // return updated;
+  }
+
+  // ── PUT /api/leave-calendar/UpdateActiveStatus/:id/:isactive ─────────────
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(`UpdateActiveStatus started | id=${id}, userId=${currentId}`);
+
+    // const updated = await this.prisma.hrmLeaveCalendar.update({
+    //   where: { leavecalendarid: id },
+    //   data: {
+    //     modifiedby: currentId,
+    //     modifieddate: new Date(),
+    //     isactive: isactive,
+    //   },
+    // });
+
+    // if (!updated) throw new NotFoundException('Update failed or record not found');
+
+    // this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     // return updated;
   }
 
@@ -150,8 +171,8 @@ export class LeaveCalendarService {
 
     if (search?.trim()) {
       where.OR = [
-        { leavecode: { contains: search } },
-        { leavename: { contains: search } },
+        { leavecode: { contains: search, mode: 'insensitive' } },
+        { leavename: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -163,15 +184,26 @@ export class LeaveCalendarService {
           where[fieldName] = rawValue === 'true';
         } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
           where[fieldName] = Number(rawValue);
-        } else if (!isNaN(Date.parse(rawValue))) {
+        } else if (isNaN(Number(rawValue)) && !isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
         } else {
-          where[fieldName] = { contains: rawValue };
+          where[fieldName] = { contains: rawValue, mode: 'insensitive' };
         }
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? 'desc' : 'asc' };
+    const validSortColumns = new Set([
+      'leavecalendarid',
+      'leavecode',
+      'leavename',
+      'fromdate',
+      'todate',
+      'statuscd',
+      'createddate',
+      'modifieddate',
+    ]);
+    const safeSortBy = validSortColumns.has(sortBy) ? sortBy : 'leavecalendarid';
+    const orderBy: any = { [safeSortBy]: isDescending ? 'desc' : 'asc' };
 
     // const [records, totalCount] = await this.prisma.$transaction([
     //   this.prisma.hrmLeaveCalendar.findMany({
