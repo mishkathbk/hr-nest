@@ -1,3 +1,3 @@
 export declare class UpdateActiveStatusDto {
-    isactive: boolean;
+    isactive?: boolean;
 }

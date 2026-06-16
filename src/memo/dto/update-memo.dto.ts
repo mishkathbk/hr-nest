@@ -1,5 +1,28 @@
-import { IsString, IsOptional, IsInt, IsBoolean, IsArray } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsOptional,
+  IsInt,
+  IsBoolean,
+  IsArray,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
+
+export class MemoEmployeeDto {
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  memoemployeeid?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  memoid?: number;
+
+  @IsInt()
+  @Type(() => Number)
+  employeeid: number;
+}
 
 export class UpdateMemoDto {
   @IsOptional()
@@ -8,9 +31,9 @@ export class UpdateMemoDto {
 
   @IsOptional()
   @IsArray()
-  @IsInt({ each: true })
-  @Type(() => Number)
-  employeeids?: number[];
+  @ValidateNested({ each: true })
+  @Type(() => MemoEmployeeDto)
+  employeeDTOlist?: MemoEmployeeDto[];
 
   @IsOptional()
   @IsInt()

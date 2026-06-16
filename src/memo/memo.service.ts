@@ -61,10 +61,16 @@ export class MemoService {
       },
     });
 
-    if (dto.employeeids && dto.employeeids.length > 0) {
-      const mappings = dto.employeeids.map((empId) => ({
+    if (dto.employeeDTOlist && dto.employeeDTOlist.length > 0) {
+      const mappings = dto.employeeDTOlist.map((emp) => ({
         memoid: record.memoid,
-        employeeid: empId,
+        employeeid: emp.employeeid,
+        companyid: companyId,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
+        isactive: true,
+        createdby: currentId,
+        createddate: new Date(),
+        isdeleted: false,
       }));
       await this.prisma.hrm_memo_employee.createMany({ data: mappings });
     }
@@ -114,12 +120,33 @@ export class MemoService {
     if (!updated)
       throw new NotFoundException("Update failed or record not found");
 
-    if (dto.employeeids) {
-      await this.prisma.hrm_memo_employee.deleteMany({ where: { memoid: id } });
-      if (dto.employeeids.length > 0) {
-        const mappings = dto.employeeids.map((empId) => ({
+    if (dto.employeeDTOlist) {
+      const incomingIds = dto.employeeDTOlist
+        .map((e) => e.memoemployeeid)
+        .filter((id) => id != null) as number[];
+
+      // Delete what's not in the incoming payload
+      await this.prisma.hrm_memo_employee.deleteMany({
+        where: {
           memoid: id,
-          employeeid: empId,
+          memoemployeeid: { notIn: incomingIds },
+        },
+      });
+
+      // Add new ones
+      const newMappings = dto.employeeDTOlist.filter(
+        (e) => e.memoemployeeid == null || e.memoemployeeid === 0,
+      );
+      if (newMappings.length > 0) {
+        const mappings = newMappings.map((emp) => ({
+          memoid: id,
+          employeeid: emp.employeeid,
+          companyid: companyId,
+          statuscd: dto.statuscd ?? STATUS_ACTIVE,
+          isactive: true,
+          createdby: currentId,
+          createddate: new Date(),
+          isdeleted: false,
         }));
         await this.prisma.hrm_memo_employee.createMany({ data: mappings });
       }
@@ -337,12 +364,14 @@ export class MemoService {
     return records.map((r) => {
       const relatedMappings = mappings.filter((m) => m.memoid === r.memoid);
       const employeesData = relatedMappings.map((m) => ({
+        memoemployeeid: m.memoemployeeid,
+        memoid: m.memoid,
         employeeid: m.employeeid,
         employeename: employeeMap.get(m.employeeid) || null,
       }));
       return {
         ...r,
-        employeeDTOList: employeesData,
+        employeeDTOlist: employeesData,
       };
     });
   }

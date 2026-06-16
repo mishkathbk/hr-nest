@@ -15,6 +15,7 @@ class UpdateActiveStatusDto {
 }
 exports.UpdateActiveStatusDto = UpdateActiveStatusDto;
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], UpdateActiveStatusDto.prototype, "isactive", void 0);
