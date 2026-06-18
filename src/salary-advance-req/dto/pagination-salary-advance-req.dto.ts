@@ -36,7 +36,7 @@ export class PaginationSalaryAdvanceReqDto {
 
   @IsOptional()
   @IsString()
-  sortBy?: string = 'reqid';
+  sortBy?: string = 'salaryadvancereqid';
 
   @IsOptional()
   @IsBoolean()

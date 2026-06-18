@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   ParseIntPipe,
+  ParseBoolPipe,
   HttpCode,
   HttpStatus,
   UseGuards,
@@ -21,7 +22,7 @@ import { CreateSalaryCertificateReqDto } from './dto/create-salary-certificate-r
 import { UpdateSalaryCertificateReqDto } from './dto/update-salary-certificate-req.dto';
 import { PaginationSalaryCertificateReqDto } from './dto/pagination-salary-certificate-req.dto';
 
-@Controller('salary-certificate-req')
+@Controller('hrms/salary-certificate-req')
 // @UseGuards(JwtAuthGuard)
 export class SalaryCertificateReqController {
   constructor(
@@ -88,6 +89,17 @@ export class SalaryCertificateReqController {
       currentId,
       companyId,
     );
+  }
+
+  // PUT /api/salary-certificate-req/UpdateActiveStatus/:id/:isactive
+  @Put('UpdateActiveStatus/:id/:isactive')
+  @ResponseMessage('Status updated successfully')
+  UpdateActiveStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('isactive', ParseBoolPipe) isactive: boolean,
+    @CurrentUser('currentId') currentId: number,
+  ) {
+    return this.salaryCertificateReqService.UpdateActiveStatus(id, isactive, currentId);
   }
 
   // DELETE /api/salary-certificate-req/:id

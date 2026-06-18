@@ -6,12 +6,21 @@ export class CreateSalaryCertificateReqDto {
   reqno: string;
 
   @IsOptional()
-  @IsString()
-  reqdate?: string;
+  @IsInt()
+  @Type(() => Number)
+  reqforcd?: number;
 
   @IsOptional()
   @IsString()
-  passporto?: string;
+  reason?: string;
+
+  @IsOptional()
+  @IsString()
+  passportno?: string;
+
+  @IsOptional()
+  @IsString()
+  issuedto?: string;
 
   @IsOptional()
   @IsString()

@@ -1,13 +1,25 @@
-import { IsString, IsOptional, IsInt, IsBoolean, IsNumber } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsOptional,
+  IsInt,
+  IsBoolean,
+  IsNumber,
+  IsDateString,
+} from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateSalaryAdvanceReqDto {
   @IsString()
-  reqNo: string;
+  reqno: string;
+
+  @IsInt()
+  @Type(() => Number)
+  employeeid: number;
 
   @IsOptional()
-  @IsString()
-  requestingFor?: string;
+  @IsInt()
+  @Type(() => Number)
+  reqforcd?: number;
 
   @IsOptional()
   @IsString()
@@ -16,19 +28,47 @@ export class CreateSalaryAdvanceReqDto {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  grossSalary?: number;
+  grosssalary?: number;
 
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  salaryAdvanceAmountReq?: number;
+  salaryadvanceamountreq?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  approvedamount?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  noofdeductions?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  amountdeductiblepermonth?: number;
+
+  @IsOptional()
+  @IsDateString()
+  deductionstartdate?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  approvedby?: number;
+
+  @IsOptional()
+  @IsDateString()
+  approveddate?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  statuscd?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

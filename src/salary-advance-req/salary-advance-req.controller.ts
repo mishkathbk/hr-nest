@@ -21,7 +21,7 @@ import { CreateSalaryAdvanceReqDto } from './dto/create-salary-advance-req.dto';
 import { UpdateSalaryAdvanceReqDto } from './dto/update-salary-advance-req.dto';
 import { PaginationSalaryAdvanceReqDto } from './dto/pagination-salary-advance-req.dto';
 
-@Controller('salary-advance-req')
+@Controller('hrms/salary-advance-req')
 // @UseGuards(JwtAuthGuard)
 export class SalaryAdvanceReqController {
   constructor(
@@ -32,7 +32,7 @@ export class SalaryAdvanceReqController {
 
   // POST /api/salary-advance-req/list/pagination
   // Body: { search?, filterList?, offset?, limit? }
-  @Post('list/pagination')
+  @Post('ListPagination')
   @HttpCode(HttpStatus.OK)
   listPagination(
     @Body() dto: PaginationSalaryAdvanceReqDto,

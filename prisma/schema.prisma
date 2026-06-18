@@ -1551,9 +1551,12 @@ model gen_lookup {
   gen_smsnotificationhistory                                                                         gen_smsnotificationhistory[]
   hrm_attendance                                                                                     hrm_attendance[]
   hrm_employee_hrm_employee_gendercdTogen_lookup                                                     hrm_employee[]                       @relation("hrm_employee_gendercdTogen_lookup")
+  hrm_employee_hrm_employee_gradecdTogen_lookup                                                      hrm_employee[]                       @relation("hrm_employee_gradecdTogen_lookup")
   hrm_employee_hrm_employee_maritalstatuscdTogen_lookup                                              hrm_employee[]                       @relation("hrm_employee_maritalstatuscdTogen_lookup")
   hrm_employee_hrm_employee_professioncdTogen_lookup                                                 hrm_employee[]                       @relation("hrm_employee_professioncdTogen_lookup")
   hrm_employee_hrm_employee_qualificationcdTogen_lookup                                              hrm_employee[]                       @relation("hrm_employee_qualificationcdTogen_lookup")
+  hrm_employee_hrm_employee_statuscdTogen_lookup                                                     hrm_employee[]                       @relation("hrm_employee_statuscdTogen_lookup")
+  hrm_employee_hrm_employee_sysacccdTogen_lookup                                                     hrm_employee[]                       @relation("hrm_employee_sysacccdTogen_lookup")
   hrm_employeedocument                                                                               hrm_employeedocument[]
   inv_itemmaster_inv_itemmaster_itemcosttypecdTogen_lookup                                           inv_itemmaster[]                     @relation("inv_itemmaster_itemcosttypecdTogen_lookup")
   inv_itemmaster_inv_itemmaster_itemtypecdTogen_lookup                                               inv_itemmaster[]                     @relation("inv_itemmaster_itemtypecdTogen_lookup")
@@ -1856,6 +1859,25 @@ model hrm_employee {
   modifieddate                                                       DateTime?                     @db.Timestamp(6)
   documentgroupid1                                                   Int?
   documentgroupid2                                                   Int?
+  issalesallowed                                                     Int?
+  othercontactno                                                     String?                       @db.VarChar(100)
+  statuscd                                                           Int?
+  isdeleted                                                          Boolean?
+  deleteby                                                           Int?
+  deletedate                                                         DateTime?                     @db.Timestamp(6)
+  sysacccd                                                           Int?
+  notes1                                                             String?                       @db.VarChar(250)
+  notes2                                                             String?                       @db.VarChar(250)
+  emergencycontactno                                                 String?                       @db.VarChar(50)
+  sponsorname                                                        String?                       @db.VarChar(200)
+  offersignedstatus                                                  Boolean?
+  appointmentsignedstatus                                            Boolean?
+  appointmentsigneddate                                              DateTime?                     @db.Date
+  reportingemployeeid                                                Int?
+  totalsalary                                                        Decimal?                      @db.Decimal(14, 4)
+  isdraft                                                            Boolean?
+  attmachineuserid                                                   Int?
+  gradecd                                                            Int?
   adm_user                                                           adm_user[]
   ast_assetmaintenance                                               ast_assetmaintenance[]
   ast_assetmaintenancehistory                                        ast_assetmaintenancehistory[]
@@ -1870,15 +1892,21 @@ model hrm_employee {
   hrm_department                                                     hrm_department?               @relation(fields: [departmentid], references: [departmentid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_department")
   hrm_designation                                                    hrm_designation?              @relation(fields: [designationid], references: [designationid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_designation")
   gen_lookup_hrm_employee_gendercdTogen_lookup                       gen_lookup?                   @relation("hrm_employee_gendercdTogen_lookup", fields: [gendercd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_gender")
+  gen_lookup_hrm_employee_gradecdTogen_lookup                        gen_lookup?                   @relation("hrm_employee_gradecdTogen_lookup", fields: [gradecd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_grade")
   gen_lookup_hrm_employee_maritalstatuscdTogen_lookup                gen_lookup?                   @relation("hrm_employee_maritalstatuscdTogen_lookup", fields: [maritalstatuscd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_maritalstatus")
   gen_country                                                        gen_country?                  @relation(fields: [nationalityid], references: [countryid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_nationality")
   gen_lookup_hrm_employee_professioncdTogen_lookup                   gen_lookup?                   @relation("hrm_employee_professioncdTogen_lookup", fields: [professioncd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_profession")
   gen_lookup_hrm_employee_qualificationcdTogen_lookup                gen_lookup?                   @relation("hrm_employee_qualificationcdTogen_lookup", fields: [qualificationcd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_qualification")
+  hrm_employee_hrm_employee_reportingemployeeidTohrm_employee        hrm_employee?                 @relation("hrm_employee_reportingemployeeidTohrm_employee", fields: [reportingemployeeid], references: [employeeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_reportingemp")
+  other_hrm_employee_hrm_employee_reportingemployeeidTohrm_employee  hrm_employee[]                @relation("hrm_employee_reportingemployeeidTohrm_employee")
   hrm_employee                                                       hrm_employee?                 @relation("hrm_employeeTohrm_employee", fields: [reportingto], references: [employeeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_reportingto")
   other_hrm_employee                                                 hrm_employee[]                @relation("hrm_employeeTohrm_employee")
+  gen_lookup_hrm_employee_statuscdTogen_lookup                       gen_lookup?                   @relation("hrm_employee_statuscdTogen_lookup", fields: [statuscd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_status")
+  gen_lookup_hrm_employee_sysacccdTogen_lookup                       gen_lookup?                   @relation("hrm_employee_sysacccdTogen_lookup", fields: [sysacccd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employee_sysacc")
   gen_documentgroup_hrm_employee_documentgroupid1Togen_documentgroup gen_documentgroup?            @relation("hrm_employee_documentgroupid1Togen_documentgroup", fields: [documentgroupid1], references: [documentgroupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_hrm_employee_documentgroup1")
   gen_documentgroup_hrm_employee_documentgroupid2Togen_documentgroup gen_documentgroup?            @relation("hrm_employee_documentgroupid2Togen_documentgroup", fields: [documentgroupid2], references: [documentgroupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_hrm_employee_documentgroup2")
   hrm_employeedocument                                               hrm_employeedocument[]
+  hrm_employeeleave                                                  hrm_employeeleave[]
   hrm_employeesalary                                                 hrm_employeesalary[]
   prj_projectassignment                                              prj_projectassignment[]
   pur_purchaseorder                                                  pur_purchaseorder[]
@@ -4384,24 +4412,25 @@ model wfl_stateaction {
 }
 
 model hrm_leavetype {
-  leavetypeid         Int       @id @default(autoincrement())
-  leavetypecode       String?   @db.VarChar(10)
-  leavetypename       String?   @db.VarChar(100)
+  leavetypeid         Int                 @id @default(autoincrement())
+  leavetypecode       String?             @db.VarChar(10)
+  leavetypename       String?             @db.VarChar(100)
   leavetypecd         Int?
   leavetypecategorycd Int?
   maximumleavedays    Int?
   daysbeforeleave     Int?
   isdocumentmandatory Boolean?
   companyid           Int?
-  isactive            Boolean   @default(true)
+  isactive            Boolean             @default(true)
   createdby           Int?
-  createddate         DateTime? @default(now()) @db.Timestamp(6)
+  createddate         DateTime?           @default(now()) @db.Timestamp(6)
   modifiedby          Int?
-  modifieddate        DateTime? @db.Timestamp(6)
+  modifieddate        DateTime?           @db.Timestamp(6)
   isdeleted           Boolean?
   deleteby            Int?
-  deletedate          DateTime? @db.Timestamp(6)
+  deletedate          DateTime?           @db.Timestamp(6)
   statuscd            Int?
+  hrm_employeeleave   hrm_employeeleave[]
 
   @@unique([companyid, leavetypecode], map: "uq_hrm_leavetype_company_code")
 }
@@ -4429,8 +4458,9 @@ model hrm_policy {
 model hrm_salary_certificate_req {
   reqid        Int       @id @default(autoincrement())
   reqno        String    @db.VarChar(50)
-  reqdate      DateTime? @db.Timestamp(6)
-  passporto    String?   @db.VarChar(50)
+  passportno   String?   @db.VarChar(50)
+  issuedto     String?   @db.VarChar(100)
+  reason       String?   @db.VarChar(500)
   approvedby   String?   @db.VarChar(100)
   statuscd     Int?
   companyid    Int?
@@ -4442,27 +4472,35 @@ model hrm_salary_certificate_req {
   isdeleted    Boolean?
   deleteby     Int?
   deletedate   DateTime? @db.Timestamp(6)
+  reqforcd     Int?
 
   @@unique([companyid, reqno], map: "uq_hrm_salary_certificate_req_company_reqno")
 }
 
 model hrm_salary_advance_req {
-  reqid                  Int       @id @default(autoincrement())
-  reqno                  String    @db.VarChar(50)
-  requestingfor          String?   @db.VarChar(100)
-  reason                 String?
-  grosssalary            Decimal?  @db.Decimal
-  salaryadvanceamountreq Decimal?  @db.Decimal
-  statuscd               Int?
-  companyid              Int?
-  isactive               Boolean   @default(true)
-  createdby              Int?
-  createddate            DateTime? @default(now()) @db.Timestamp(6)
-  modifiedby             Int?
-  modifieddate           DateTime? @db.Timestamp(6)
-  isdeleted              Boolean?
-  deleteby               Int?
-  deletedate             DateTime? @db.Timestamp(6)
+  salaryadvancereqid       Int       @id @default(autoincrement())
+  reqno                    String    @db.VarChar(50)
+  employeeid               Int
+  reqforcd                 Int?
+  reason                   String?   @db.VarChar(500)
+  grosssalary              Decimal?  @db.Decimal(14, 4)
+  salaryadvanceamountreq   Decimal?  @db.Decimal(14, 4)
+  approvedamount           Decimal?  @db.Decimal(14, 4)
+  noofdeductions           Int?
+  amountdeductiblepermonth Decimal?  @db.Decimal(14, 4)
+  deductionstartdate       DateTime? @db.Date
+  approvedby               Int?
+  approveddate             DateTime? @db.Timestamp(6)
+  statuscd                 Int?
+  companyid                Int?
+  isactive                 Boolean   @default(true)
+  createdby                Int?
+  createddate              DateTime? @default(now()) @db.Timestamp(6)
+  modifiedby               Int?
+  modifieddate             DateTime? @db.Timestamp(6)
+  isdeleted                Boolean?
+  deleteby                 Int?
+  deletedate               DateTime? @db.Timestamp(6)
 
   @@unique([companyid, reqno], map: "uq_hrm_salary_advance_req_company_reqno")
 }
@@ -4558,6 +4596,7 @@ model ast_assetpurchase_temp {
   FEEDING_FROM                      String? @map("FEEDING FROM") @db.VarChar(50)
   Asset_Code                        String? @map("Asset Code") @db.VarChar(50)
   column30                          String? @db.VarChar(50)
+  companyid                         Int?
 }
 
 model hrm_memo_employee {
@@ -4662,4 +4701,22 @@ model hrm_salaryadjustment {
   deleteby           Int?
   deletedate         DateTime?      @db.Timestamp(6)
   hrm_salarytype     hrm_salarytype @relation(fields: [salarytypeid], references: [salarytypeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_salaryadjustment_salarytype")
+}
+
+model hrm_employeeleave {
+  employeeleaveid Int            @id @default(autoincrement())
+  employeeid      Int?
+  leavetypeid     Int?
+  count           Decimal?       @db.Decimal(14, 4)
+  createdby       Int?
+  createddate     DateTime?      @default(now()) @db.Timestamp(6)
+  modifiedby      Int?
+  modifieddate    DateTime?      @db.Timestamp(6)
+  isdeleted       Boolean?
+  deleteby        Int?
+  deletedate      DateTime?      @db.Timestamp(6)
+  notes1          String?        @db.VarChar(250)
+  notes2          String?        @db.VarChar(250)
+  hrm_employee    hrm_employee?  @relation(fields: [employeeid], references: [employeeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employeeleave_employee")
+  hrm_leavetype   hrm_leavetype? @relation(fields: [leavetypeid], references: [leavetypeid], onDelete: NoAction, onUpdate: NoAction, map: "fk_employeeleave_leavetype")
 }

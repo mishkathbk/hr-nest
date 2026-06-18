@@ -50,8 +50,10 @@ export class SalaryCertificateReqService {
     const record = await this.prisma.hrm_salary_certificate_req.create({
       data: {
         reqno: dto.reqno,
-        reqdate: dto.reqdate ? new Date(dto.reqdate) : null,
-        passporto: dto.passporto ?? null,
+        reqforcd: dto.reqforcd ?? null,
+        reason: dto.reason ?? null,
+        passportno: dto.passportno ?? null,
+        issuedto: dto.issuedto ?? null,
         approvedby: dto.approvedby ?? null,
         statuscd: dto.statuscd ?? STATUS_ACTIVE,
         isactive: dto.isactive ?? true,
@@ -92,8 +94,10 @@ export class SalaryCertificateReqService {
       where: { reqid: id },
       data: {
         reqno: dto.reqno,
-        reqdate: dto.reqdate ? new Date(dto.reqdate) : undefined,
-        passporto: dto.passporto ?? null,
+        reqforcd: dto.reqforcd ?? null,
+        reason: dto.reason ?? null,
+        passportno: dto.passportno ?? null,
+        issuedto: dto.issuedto ?? null,
         approvedby: dto.approvedby ?? null,
         statuscd: dto.statuscd ?? undefined,
         isactive: dto.isactive ?? undefined,
@@ -107,6 +111,29 @@ export class SalaryCertificateReqService {
       throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
+    return updated;
+  }
+
+  // ─── UpdateActiveStatus ──────────────────────────────────────────────────────────────
+
+  async UpdateActiveStatus(id: number, isactive: boolean, currentId: number) {
+    this.logger.log(
+      `UpdateActiveStatus started | id=${id}, userId=${currentId}`,
+    );
+
+    const updated = await this.prisma.hrm_salary_certificate_req.update({
+      where: { reqid: id },
+      data: {
+        modifiedby: currentId,
+        modifieddate: new Date(),
+        isactive: isactive,
+      },
+    });
+
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
+
+    this.logger.log(`UpdateActiveStatus completed | id=${id}`);
     return updated;
   }
 
@@ -181,7 +208,7 @@ export class SalaryCertificateReqService {
     if (search?.trim()) {
       where.OR = [
         { reqno: { contains: search } },
-        { passporto: { contains: search } },
+        { passportno: { contains: search } },
       ];
     }
 
@@ -213,9 +240,40 @@ export class SalaryCertificateReqService {
       this.prisma.hrm_salary_certificate_req.count({ where }),
     ]);
 
+    const lookupIds = [
+      ...new Set(
+        records
+          .map((r) => r.reqforcd)
+          .filter((id): id is number => id != null),
+      ),
+    ];
+
+    const lookupMap = new Map<
+      number,
+      {
+        lookupid: number;
+        lookupname: string | null;
+        lookupnamear: string | null;
+      }
+    >();
+
+    if (lookupIds.length > 0) {
+      const lookups = await this.prisma.gen_lookup.findMany({
+        where: { lookupid: { in: lookupIds } },
+        select: { lookupid: true, lookupname: true, lookupnamear: true },
+      });
+      lookups.forEach((l) => lookupMap.set(l.lookupid, l));
+    }
+
+    const enrichedRecords = records.map((r) => ({
+      ...r,
+      reqforcdDTOList:
+        r.reqforcd != null ? (lookupMap.get(r.reqforcd) ?? null) : null,
+    }));
+
     this.logger.log(
       `ListPagination completed | count=${records.length}, totalCount=${totalCount}`,
     );
-    return new PaginatedResult(records, totalCount);
+    return new PaginatedResult(enrichedRecords, totalCount);
   }
 }

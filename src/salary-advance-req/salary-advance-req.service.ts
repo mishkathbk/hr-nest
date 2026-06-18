@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { validateUniqueCode } from "../common/validators/unique-code.validator";
 import { PaginatedResult } from "../common/interceptors/response.interceptor";
@@ -38,7 +43,7 @@ export class SalaryAdvanceReqService {
     this.logger.log(`GetByKey started | id=${id}`);
 
     const record = await this.prisma.hrm_salary_advance_req.findUnique({
-      where: { reqid: id },
+      where: { salaryadvancereqid: id },
     });
 
     if (!record) throw new NotFoundException("Record not found");
@@ -57,12 +62,12 @@ export class SalaryAdvanceReqService {
     this.logger.log(
       `SaveData started | userId=${currentId}, companyId=${companyId}`,
     );
-    if (dto.grossSalary && dto.salaryAdvanceAmountReq) {
+    if (dto.employeeid && dto.grosssalary && dto.salaryadvanceamountreq) {
       await this.validateAdvanceEligibility(
-        // dto.employeeId,
+        dto.employeeid,
         companyId,
-        dto.grossSalary,
-        dto.salaryAdvanceAmountReq,
+        dto.grosssalary,
+        dto.salaryadvanceamountreq,
       );
     }
     await validateUniqueCode(
@@ -70,18 +75,25 @@ export class SalaryAdvanceReqService {
       "hrm_salary_advance_req",
       companyId,
       "reqno",
-      dto.reqNo,
+      dto.reqno,
     );
 
     const record = await this.prisma.hrm_salary_advance_req.create({
       data: {
-        reqno: dto.reqNo,
-        requestingfor: dto.requestingFor ?? null,
+        reqno: dto.reqno,
+        employeeid: dto.employeeid,
+        reqforcd: dto.reqforcd ?? null,
         reason: dto.reason ?? null,
-        grosssalary: dto.grossSalary ?? null,
-        salaryadvanceamountreq: dto.salaryAdvanceAmountReq ?? null,
-        statuscd: dto.statusCd ?? STATUS_ACTIVE,
-        isactive: dto.isActive ?? true,
+        grosssalary: dto.grosssalary ?? null,
+        salaryadvanceamountreq: dto.salaryadvanceamountreq ?? null,
+        approvedamount: dto.approvedamount ?? null,
+        noofdeductions: dto.noofdeductions ?? null,
+        amountdeductiblepermonth: dto.amountdeductiblepermonth ?? null,
+        deductionstartdate: dto.deductionstartdate ? new Date(dto.deductionstartdate) : null,
+        approvedby: dto.approvedby ?? null,
+        approveddate: dto.approveddate ? new Date(dto.approveddate) : null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
+        isactive: dto.isactive ?? true,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
@@ -89,7 +101,7 @@ export class SalaryAdvanceReqService {
       },
     });
 
-    this.logger.log(`SaveData completed | reqid=${record.reqid}`);
+    this.logger.log(`SaveData completed | id=${record.salaryadvancereqid}`);
     return record;
   }
 
@@ -103,39 +115,51 @@ export class SalaryAdvanceReqService {
   ) {
     this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
 
-    if (dto.grossSalary && dto.salaryAdvanceAmountReq) {
+    let employeeIdForValidation = dto.employeeid;
+    if ((dto.grosssalary || dto.salaryadvanceamountreq) && !employeeIdForValidation) {
+       const existing = await this.prisma.hrm_salary_advance_req.findUnique({ where: { salaryadvancereqid: id } });
+       if (existing) employeeIdForValidation = existing.employeeid;
+    }
+
+    if (employeeIdForValidation && dto.grosssalary && dto.salaryadvanceamountreq) {
       await this.validateAdvanceEligibility(
-        // dto.employeeId,
+        employeeIdForValidation,
         companyId,
-        dto.grossSalary,
-        dto.salaryAdvanceAmountReq,
+        dto.grosssalary,
+        dto.salaryadvanceamountreq,
         id, // excludes the current record from history check
       );
     }
 
-    if (dto.reqNo) {
+    if (dto.reqno) {
       await validateUniqueCode(
         this.prisma,
         "hrm_salary_advance_req",
         companyId,
         "reqno",
-        dto.reqNo,
-        "reqid",
+        dto.reqno,
+        "salaryadvancereqid",
         id,
       );
     }
 
     const updated = await this.prisma.hrm_salary_advance_req.update({
-      where: { reqid: id },
+      where: { salaryadvancereqid: id },
       data: {
-        reqno: dto.reqNo,
-        requestingfor: dto.requestingFor ?? null,
-        reason: dto.reason ?? null,
-        grosssalary: dto.grossSalary ?? null,
-        salaryadvanceamountreq: dto.salaryAdvanceAmountReq ?? null,
-        statuscd: dto.statusCd ?? undefined,
-        isactive: dto.isActive ?? undefined,
-        companyid: companyId,
+        reqno: dto.reqno,
+        employeeid: dto.employeeid,
+        reqforcd: dto.reqforcd,
+        reason: dto.reason,
+        grosssalary: dto.grosssalary,
+        salaryadvanceamountreq: dto.salaryadvanceamountreq,
+        approvedamount: dto.approvedamount,
+        noofdeductions: dto.noofdeductions,
+        amountdeductiblepermonth: dto.amountdeductiblepermonth,
+        deductionstartdate: dto.deductionstartdate ? new Date(dto.deductionstartdate) : undefined,
+        approvedby: dto.approvedby,
+        approveddate: dto.approveddate ? new Date(dto.approveddate) : undefined,
+        statuscd: dto.statuscd,
+        isactive: dto.isactive,
         modifiedby: currentId,
         modifieddate: new Date(),
       },
@@ -154,7 +178,7 @@ export class SalaryAdvanceReqService {
     this.logger.log(`DeleteData started | id=${id}, userId=${currentId}`);
 
     const updated = await this.prisma.hrm_salary_advance_req.update({
-      where: { reqid: id },
+      where: { salaryadvancereqid: id },
       data: {
         isdeleted: true,
         deleteby: currentId,
@@ -204,7 +228,7 @@ export class SalaryAdvanceReqService {
       filters = [],
       pageNumber = 1,
       pageSize = 10,
-      sortBy = "reqid",
+      sortBy = "salaryadvancereqid",
       isDescending = true,
     } = dto;
 
@@ -219,8 +243,7 @@ export class SalaryAdvanceReqService {
     if (search?.trim()) {
       where.OR = [
         { reqno: { contains: search } },
-        { requestingfor: { contains: search } },
-        { reason: { contains: search } },
+        // { reason: { contains: search } },
       ];
     }
 
@@ -259,7 +282,7 @@ export class SalaryAdvanceReqService {
   }
 
   private async validateAdvanceEligibility(
-    // employeeId: number,
+    employeeId: number,
     companyId: number,
     grossSalary: number,
     requestedAmount: number,
@@ -270,8 +293,8 @@ export class SalaryAdvanceReqService {
       where: {
         isdeleted: false,
         companyid: companyId,
-        // employeeid: employeeId,
-        ...(excludeReqId ? { NOT: { reqid: excludeReqId } } : {}),
+        employeeid: employeeId,
+        ...(excludeReqId ? { NOT: { salaryadvancereqid: excludeReqId } } : {}),
       },
       orderBy: { createddate: "desc" },
     });

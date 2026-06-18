@@ -18,7 +18,7 @@ import { ResponseMessage } from "../common/decorators/response-message.decorator
 import { PayslipService } from "./payslip.service";
 import { GetMyPayslipDto } from "./dto/get-my-payslip.dto";
 
-@Controller("payslip")  
+@Controller("hrms/payslip")  
 // @UseGuards(JwtAuthGuard)
 export class PayslipController {
   constructor(private readonly payslipService: PayslipService) {}
