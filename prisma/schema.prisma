@@ -1002,6 +1002,17 @@ model ast_assetpurchase {
   qrcodeimage                                                   Bytes?
   documentgroupid2                                              Int?
   isactive                                                      Boolean                       @default(true)
+  facilitytypecd                                                Int?
+  unitmeasurement                                               String?                       @db.VarChar(100)
+  designlife                                                    Int?
+  unitcost                                                      Decimal?                      @db.Decimal(14, 4)
+  totalassetcost                                                Decimal?                      @db.Decimal(14, 4)
+  conditionrating                                               String?                       @db.VarChar(100)
+  feedingto                                                     String?                       @db.VarChar(200)
+  feedingfrom                                                   String?                       @db.VarChar(200)
+  criticality                                                   String?                       @db.VarChar(100)
+  remarks                                                       String?                       @db.VarChar(500)
+  sizecapacity                                                  String?                       @db.VarChar(200)
   ast_assetdisposel                                             ast_assetdisposel[]
   ast_assetmaintenance                                          ast_assetmaintenance[]
   ast_assetmaintenancehistory                                   ast_assetmaintenancehistory[]
@@ -1009,6 +1020,7 @@ model ast_assetpurchase {
   inv_itemlocation                                              inv_itemlocation?             @relation(fields: [currentitemlocationid], references: [itemlocationid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_currentitemlocation")
   hrm_department                                                hrm_department?               @relation(fields: [departmentid], references: [departmentid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_department")
   gen_lookup_ast_assetpurchase_depreciationtypecodeTogen_lookup gen_lookup?                   @relation("ast_assetpurchase_depreciationtypecodeTogen_lookup", fields: [depreciationtypecode], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_depreciationtype")
+  gen_lookup_ast_assetpurchase_facilitytypecdTogen_lookup       gen_lookup?                   @relation("ast_assetpurchase_facilitytypecdTogen_lookup", fields: [facilitytypecd], references: [lookupid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_facilitytype")
   inv_itemmaster                                                inv_itemmaster?               @relation(fields: [itemid], references: [itemid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_item")
   inv_itemsublocation                                           inv_itemsublocation?          @relation(fields: [itemsublocationid], references: [itemsublocationid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_itemsublocation")
   ast_property                                                  ast_property?                 @relation(fields: [propertyid], references: [propertyid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ast_assetpurchase_property")
@@ -1522,6 +1534,7 @@ model gen_lookup {
   ast_assetmaintenance_ast_assetmaintenance_usagetypecodeTogen_lookup                                ast_assetmaintenance[]               @relation("ast_assetmaintenance_usagetypecodeTogen_lookup")
   ast_assetpurchase_ast_assetpurchase_assetstatuscodeTogen_lookup                                    ast_assetpurchase[]                  @relation("ast_assetpurchase_assetstatuscodeTogen_lookup")
   ast_assetpurchase_ast_assetpurchase_depreciationtypecodeTogen_lookup                               ast_assetpurchase[]                  @relation("ast_assetpurchase_depreciationtypecodeTogen_lookup")
+  ast_assetpurchase_ast_assetpurchase_facilitytypecdTogen_lookup                                     ast_assetpurchase[]                  @relation("ast_assetpurchase_facilitytypecdTogen_lookup")
   gen_audittrail_gen_audittrail_actiontypecdTogen_lookup                                             gen_audittrail[]                     @relation("gen_audittrail_actiontypecdTogen_lookup")
   gen_audittrail_gen_audittrail_audittypecdTogen_lookup                                              gen_audittrail[]                     @relation("gen_audittrail_audittypecdTogen_lookup")
   gen_audittrail_gen_audittrail_sourcetypecdTogen_lookup                                             gen_audittrail[]                     @relation("gen_audittrail_sourcetypecdTogen_lookup")

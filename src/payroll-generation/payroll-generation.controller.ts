@@ -16,7 +16,7 @@ import { CurrentUser } from '../common/decorators/user.decorator';
 import { ResponseMessage } from '../common/decorators/response-message.decorator';
 // import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
-@Controller('payroll-generation')
+@Controller('hrms/payroll-generation')
 // @UseGuards(JwtAuthGuard)
 export class PayrollGenerationController {
   constructor(

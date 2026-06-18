@@ -1,15 +1,11 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { validateUniqueCode } from '../common/validators/unique-code.validator';
-import { PaginatedResult } from '../common/interceptors/response.interceptor';
-import { CreateSalaryCertificateReqDto } from './dto/create-salary-certificate-req.dto';
-import { UpdateSalaryCertificateReqDto } from './dto/update-salary-certificate-req.dto';
-import { PaginationSalaryCertificateReqDto } from './dto/pagination-salary-certificate-req.dto';
-import { STATUS_ACTIVE } from '../common/constants/status.constants';
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "../prisma/prisma.service";
+import { validateUniqueCode } from "../common/validators/unique-code.validator";
+import { PaginatedResult } from "../common/interceptors/response.interceptor";
+import { CreateSalaryCertificateReqDto } from "./dto/create-salary-certificate-req.dto";
+import { UpdateSalaryCertificateReqDto } from "./dto/update-salary-certificate-req.dto";
+import { PaginationSalaryCertificateReqDto } from "./dto/pagination-salary-certificate-req.dto";
+import { STATUS_ACTIVE } from "../common/constants/status.constants";
 
 @Injectable()
 export class SalaryCertificateReqService {
@@ -26,7 +22,7 @@ export class SalaryCertificateReqService {
       where: { reqid: id },
     });
 
-    if (!record) throw new NotFoundException('Record not found');
+    if (!record) throw new NotFoundException("Record not found");
 
     this.logger.log(`GetByKey completed | id=${id}`);
     return record;
@@ -45,20 +41,20 @@ export class SalaryCertificateReqService {
 
     await validateUniqueCode(
       this.prisma,
-      'hrm_salary_certificate_req',
+      "hrm_salary_certificate_req",
       companyId,
-      'reqno',
-      dto.reqNo,
+      "reqno",
+      dto.reqno,
     );
 
     const record = await this.prisma.hrm_salary_certificate_req.create({
       data: {
-        reqno: dto.reqNo,
-        reqdate: dto.reqDate ? new Date(dto.reqDate) : null,
+        reqno: dto.reqno,
+        reqdate: dto.reqdate ? new Date(dto.reqdate) : null,
         passporto: dto.passporto ?? null,
-        approvedby: dto.approvedBy ?? null,
-        statuscd: dto.statusCd ?? STATUS_ACTIVE,
-        isactive: dto.isActive ?? true,
+        approvedby: dto.approvedby ?? null,
+        statuscd: dto.statuscd ?? STATUS_ACTIVE,
+        isactive: dto.isactive ?? true,
         companyid: companyId,
         createdby: currentId,
         createddate: new Date(),
@@ -80,14 +76,14 @@ export class SalaryCertificateReqService {
   ) {
     this.logger.log(`UpdateData started | id=${id}, userId=${currentId}`);
 
-    if (dto.reqNo) {
+    if (dto.reqno) {
       await validateUniqueCode(
         this.prisma,
-        'hrm_salary_certificate_req',
+        "hrm_salary_certificate_req",
         companyId,
-        'reqno',
-        dto.reqNo,
-        'reqid',
+        "reqno",
+        dto.reqno,
+        "reqid",
         id,
       );
     }
@@ -95,19 +91,20 @@ export class SalaryCertificateReqService {
     const updated = await this.prisma.hrm_salary_certificate_req.update({
       where: { reqid: id },
       data: {
-        reqno: dto.reqNo,
-        reqdate: dto.reqDate ? new Date(dto.reqDate) : undefined,
+        reqno: dto.reqno,
+        reqdate: dto.reqdate ? new Date(dto.reqdate) : undefined,
         passporto: dto.passporto ?? null,
-        approvedby: dto.approvedBy ?? null,
-        statuscd: dto.statusCd ?? undefined,
-        isactive: dto.isActive ?? undefined,
+        approvedby: dto.approvedby ?? null,
+        statuscd: dto.statuscd ?? undefined,
+        isactive: dto.isactive ?? undefined,
         companyid: companyId,
         modifiedby: currentId,
         modifieddate: new Date(),
       },
     });
 
-    if (!updated) throw new NotFoundException('Update failed or record not found');
+    if (!updated)
+      throw new NotFoundException("Update failed or record not found");
 
     this.logger.log(`UpdateData completed | id=${id}`);
     return updated;
@@ -127,7 +124,7 @@ export class SalaryCertificateReqService {
       },
     });
 
-    if (!updated) throw new NotFoundException('Record not found');
+    if (!updated) throw new NotFoundException("Record not found");
 
     this.logger.log(`DeleteData completed | id=${id}`);
     return { deleted: true };
@@ -151,7 +148,7 @@ export class SalaryCertificateReqService {
 
     const records = await this.prisma.hrm_salary_certificate_req.findMany({
       where,
-      orderBy: { createddate: 'desc' },
+      orderBy: { createddate: "desc" },
     });
 
     this.logger.log(`List completed | count=${records.length}`);
@@ -165,11 +162,11 @@ export class SalaryCertificateReqService {
     companyId: number,
   ): Promise<PaginatedResult<any>> {
     const {
-      search = '',
+      search = "",
       filters = [],
       pageNumber = 1,
       pageSize = 10,
-      sortBy = 'reqid',
+      sortBy = "reqid",
       isDescending = true,
     } = dto;
 
@@ -192,9 +189,9 @@ export class SalaryCertificateReqService {
       for (const item of filters) {
         const fieldName = item.attributeName;
         const rawValue = item.attributeValue;
-        if (rawValue === 'true' || rawValue === 'false') {
-          where[fieldName] = rawValue === 'true';
-        } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== '') {
+        if (rawValue === "true" || rawValue === "false") {
+          where[fieldName] = rawValue === "true";
+        } else if (!isNaN(Number(rawValue)) && rawValue.trim() !== "") {
           where[fieldName] = Number(rawValue);
         } else if (!isNaN(Date.parse(rawValue))) {
           where[fieldName] = new Date(rawValue);
@@ -204,7 +201,7 @@ export class SalaryCertificateReqService {
       }
     }
 
-    const orderBy: any = { [sortBy]: isDescending ? 'desc' : 'asc' };
+    const orderBy: any = { [sortBy]: isDescending ? "desc" : "asc" };
 
     const [records, totalCount] = await this.prisma.$transaction([
       this.prisma.hrm_salary_certificate_req.findMany({

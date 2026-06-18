@@ -39,19 +39,19 @@ export class PayrollGenerationService {
     currentId: number,
   ) {
     this.logger.log(
-      `CalculateSalary started | year=${dto.year}, month=${dto.month}, companyId=${companyId}, employeeId=${dto.employeeId ?? "ALL"}`,
+      `CalculateSalary started | year=${dto.year}, month=${dto.month}, companyId=${companyId}, employeeIds=${dto.employeeIds?.join(",") ?? "ALL"}`,
     );
 
     const startDate = new Date(Date.UTC(dto.year, dto.month - 1, 1));
     const endDate = new Date(Date.UTC(dto.year, dto.month, 0, 23, 59, 59, 999));
 
-    // Fetch employees — active, filtered by company and optional employee
+    // Fetch employees — active, filtered by company and optional employees
     const employees = await this.prisma.hrm_employee.findMany({
       where: {
         companyid: companyId,
         isactive: true,
         // statuscd: 300001,
-        ...(dto.employeeId ? { employeeid: dto.employeeId } : {}),
+        ...(dto.employeeIds && dto.employeeIds.length > 0 ? { employeeid: { in: dto.employeeIds } } : {}),
       },
       select: {
         employeeid: true,

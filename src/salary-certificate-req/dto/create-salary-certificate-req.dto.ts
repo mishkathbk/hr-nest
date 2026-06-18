@@ -1,13 +1,13 @@
-import { IsString, IsOptional, IsInt, IsBoolean } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsInt, IsBoolean } from "class-validator";
+import { Type } from "class-transformer";
 
 export class CreateSalaryCertificateReqDto {
   @IsString()
-  reqNo: string;
+  reqno: string;
 
   @IsOptional()
   @IsString()
-  reqDate?: string;
+  reqdate?: string;
 
   @IsOptional()
   @IsString()
@@ -15,14 +15,14 @@ export class CreateSalaryCertificateReqDto {
 
   @IsOptional()
   @IsString()
-  approvedBy?: string;
+  approvedby?: string;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  statusCd?: number;
+  statuscd?: number;
 
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isactive?: boolean;
 }

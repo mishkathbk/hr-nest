@@ -1,4 +1,4 @@
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CalculatePayrollDto {
@@ -11,7 +11,8 @@ export class CalculatePayrollDto {
   month: number; // 1-12
 
   @IsOptional()
-  @IsInt()
+  @IsArray()
+  @IsInt({ each: true })
   @Type(() => Number)
-  employeeId?: number; // null = all active employees
+  employeeIds?: number[]; // empty/null = all active employees
 }
