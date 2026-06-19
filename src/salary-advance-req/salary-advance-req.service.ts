@@ -327,7 +327,7 @@ export class SalaryAdvanceReqService {
 
     if (requestedAmount > maxAllowed) {
       throw new BadRequestException(
-        `Requested amount exceeds the maximum allowed (${maxAllowed.toFixed(2)}).`,
+        `Requested advance amount exceeds the maximum allowed (${maxAllowed.toFixed(2)}).`,
       );
     }
 
